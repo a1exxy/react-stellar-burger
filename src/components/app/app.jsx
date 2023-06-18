@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import styles from "./app.module.css";
 import AppHeader from '../appHeader/appHeader'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
-import BurgerIngredients from "../BurgerIngredients/burgerIngredients";
+import BurgerIngredients from "../burgerIngredients/burgerIngredients";
 
 const hardCodeBurgerContentID = [0, 1, 2, 1, 1, 3, 4, 5] // тестовые данные для наполнения бургера
 
