@@ -7,10 +7,15 @@ import BurgerConstructor from "../burgerConstructor/burgerConstructor";
 import {apiItemType} from "../../utils/api";
 
 export default function BurgerIngredients(props) {
+  function calcCounter(arr) {
+    return arr.map(item=>{
+      return {...item, counter: props.burgerContent.reduce((sum, current) => current._id === item._id ? sum + 1 : sum , 0)}
+    })
+  }
   const [currentTab, setCurrentTab] = React.useState('buns')
-  const buns = props.ingredients.filter(e => e.type === 'bun')
-  const mains = props.ingredients.filter(e => e.type === 'main')
-  const sauces = props.ingredients.filter(e => e.type === 'sauce')
+  const buns = calcCounter(props.ingredients.filter(e => e.type === 'bun'))
+  const mains = calcCounter(props.ingredients.filter(e => e.type === 'main'))
+  const sauces = calcCounter(props.ingredients.filter(e => e.type === 'sauce'))
   React.useEffect(()=>{
     document.querySelector(`.${currentTab}`).scrollIntoView({behavior: "smooth", block: "start"})
   },[currentTab])
