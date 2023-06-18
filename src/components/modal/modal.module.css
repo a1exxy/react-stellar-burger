@@ -1,0 +1,30 @@
+.modal {
+  background-color: #1C1C21;
+  border-radius: 40px;
+  z-index: 20;
+  position: relative;
+  width: 720px;
+  height: 500px;
+}
+
+.modalCloseButton {
+  position: absolute;
+  background-color: rgba(0,0,0,0);
+  border: 0;
+  top: 60px;
+  right: 40px;
+  cursor: pointer;
+  display: block;
+}
+
+/*.modalHeader {*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+/*  height: 64px;*/
+/*}*/
+
+.modalBody {
+  display: flex;
+  justify-content: center;
+}

@@ -1,4 +1,4 @@
-import { Logo, BurgerIcon, ListIcon, ProfileIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./appHeader.module.css";
 import HeaderButton from '../headerButton/headerButton'
 
