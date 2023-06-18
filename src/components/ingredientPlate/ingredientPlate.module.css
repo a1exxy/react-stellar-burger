@@ -1,0 +1,16 @@
+.ingredientPlate {
+  position: relative;
+  width: 272px;
+  height: 208px;
+}
+
+.ingredientPlateDescription {
+  height: 48px;
+  text-align: center;
+}
+
+.ingredientPlatePrice {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
