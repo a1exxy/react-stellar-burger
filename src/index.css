@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+}
+
+#root {
+}
+
+.show {
+  border: 1px dashed yellow;
+}
