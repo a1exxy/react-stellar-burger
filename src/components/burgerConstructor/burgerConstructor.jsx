@@ -3,6 +3,7 @@ import React from "react";
 import {Button, CurrencyIcon, ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burgerConstructor.module.css'
 import {apiItemType} from '../../utils/api'
+import PropTypes from "prop-types";
 export default function BurgerConstructor(props) {
   const bun = props.burgerContent.filter(e=>e.type === 'bun')
   const burgerMains= props.burgerContent.filter(e=>e.type !== 'bun')
@@ -52,6 +53,6 @@ export default function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: apiItemType,
-    burgerContent: apiItemType
+    ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+    burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType))
 };

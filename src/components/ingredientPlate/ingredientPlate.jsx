@@ -1,7 +1,9 @@
-import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+// Плитка ингедиента
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./ingredientPlate.module.css";
-
+import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
+import {apiItemType} from '../../utils/api'
 export default function IngredientPlate(props) {
   return (
     <div className={styles.ingredientPlate}>
@@ -16,4 +18,9 @@ export default function IngredientPlate(props) {
       <p className={`text text_type_main-default ${styles.ingredientPlateDescription}`}>{props.name}</p>
     </div>
   )
+}
+
+IngredientPlate.propTypes = {
+  ...apiItemType,
+  counter: PropTypes.number
 }

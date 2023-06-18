@@ -5,6 +5,7 @@ import React from "react";
 import IngredientPlate from '../ingredientPlate/ingredientPlate'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
 import {apiItemType} from "../../utils/api";
+import PropTypes from "prop-types";
 
 export default function BurgerIngredients(props) {
   function calcCounter(arr) {
@@ -52,6 +53,6 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: apiItemType,
-    burgerContent: apiItemType
+    ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+    burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType))
 };
