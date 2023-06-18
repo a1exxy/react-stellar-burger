@@ -4,7 +4,6 @@ import AppHeader from '../appHeader/appHeader'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
 import BurgerIngredients from "../BurgerIngredients/burgerIngredients";
 
-
 const hardCodeBurgerContentID = [0, 1, 2, 1, 1, 3, 4, 5] // тестовые данные для наполнения бургера
 
 console.debug('API_INGREDIENTS_URL: ' + process.env.REACT_APP_API_INGREDIENTS_URL) // диагностический вывод источника данных
@@ -43,8 +42,8 @@ function App() {
         <div className={styles.app}>
           <AppHeader/>
           <main className={styles.main}>
-            <BurgerIngredients state={state} />
-            <BurgerConstructor state={state} />
+            <BurgerIngredients ingredients={state.ingredients} burgerContent={state.burgerContent} />
+            <BurgerConstructor ingredients={state.ingredients} burgerContent={state.burgerContent} />
           </main>
         </div>
       }

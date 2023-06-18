@@ -1,13 +1,15 @@
+// конструктор бургера
 import React from "react";
 import {Button, CurrencyIcon, ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burgerConstructor.module.css'
+import {apiItemType} from '../../utils/api'
 export default function BurgerConstructor(props) {
-  const bun = props.state.burgerContent.filter(e=>e.type === 'bun')
-  const burgerMains= props.state.burgerContent.filter(e=>e.type !== 'bun')
+  const bun = props.burgerContent.filter(e=>e.type === 'bun')
+  const burgerMains= props.burgerContent.filter(e=>e.type !== 'bun')
   if (bun.length > 1) console.error(`Булок больше одной`)
   return (
     <section className={styles.burgerConstructor}>
-      { props.state.burgerContent.length > 0 && <>
+      { props.burgerContent.length > 0 && <>
       <div className='mt-25 ml-4' style={{ display: 'flex', flexDirection: 'column', gap: '16px'}}>
         <div className={'ml-8'}>
           <ConstructorElement
@@ -48,3 +50,8 @@ export default function BurgerConstructor(props) {
     </section>
   )
 }
+
+BurgerConstructor.propTypes = {
+    ingredients: apiItemType,
+    burgerContent: apiItemType
+};
