@@ -22,6 +22,6 @@ export default function IngredientPlate(props) {
 }
 
 IngredientPlate.propTypes = {
-  settings: ingredientAndCounterPropType,
-  onDetail: PropTypes.func
+  settings: ingredientAndCounterPropType.isRequired,
+  onDetail: PropTypes.func.isRequired
 }

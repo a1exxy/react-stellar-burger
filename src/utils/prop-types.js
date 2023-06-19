@@ -24,4 +24,4 @@ const ingredientAndCounterPropType = PropTypes.shape({
   counter: PropTypes.number
 })
 
-export {ingredientPropType, ingredientAndCounterPropType}
+export {apiItemType, ingredientPropType, ingredientAndCounterPropType}

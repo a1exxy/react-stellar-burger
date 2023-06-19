@@ -2,7 +2,7 @@
 
 // import PropTypes from "prop-types";
 import styles from "./ingredientDetails.module.css";
-import {ingredientPropType} from '../../utils/prop-types'
+import {apiItemType} from '../../utils/prop-types'
 
 export default function IngredientDetails(props) {
   return (
@@ -32,4 +32,6 @@ export default function IngredientDetails(props) {
   )
 }
 
-IngredientDetails.propTypes = ingredientPropType
+IngredientDetails.propTypes = {
+  ...apiItemType
+}.isRequired

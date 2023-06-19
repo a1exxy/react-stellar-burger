@@ -11,6 +11,6 @@ export default function HeaderButton(props) {
 }
 
 HeaderButton.propTypes = {
-  text: PropTypes.string,
-  img: PropTypes.func
+  text: PropTypes.string.isRequired,
+  img: PropTypes.func.isRequired
 }

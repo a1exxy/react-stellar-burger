@@ -55,7 +55,7 @@ export default function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType),
-  burgerContent: PropTypes.arrayOf(ingredientPropType),
-  onOrder: PropTypes.func
+  ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
+  burgerContent: PropTypes.arrayOf(ingredientPropType).isRequired,
+  onOrder: PropTypes.func.isRequired
 };
