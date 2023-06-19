@@ -37,15 +37,15 @@ export default function BurgerIngredients(props) {
       <article className={`custom-scroll ${styles.ingrediensList}`}>
         <h2 className={`text text_type_main-medium buns`}>Булки</h2>
         <ul className={styles.ingrediensTypeList}>
-          {buns.map((item, index) => <li key={index}><IngredientPlate {...item} onDetail={props.onDetail} /></li>)}
+          {buns.map((item, index) => <li key={index}><IngredientPlate settings={item} onDetail={props.onDetail} /></li>)}
         </ul>
         <h2 className={`text text_type_main-medium sauces`}>Соусы</h2>
         <ul className={styles.ingrediensTypeList}>
-          {sauces.map((item, index) => <li key={index}><IngredientPlate {...item} onDetail={props.onDetail} /></li>) }
+          {sauces.map((item, index) => <li key={index}><IngredientPlate settings={item} onDetail={props.onDetail} /></li>) }
         </ul>
         <h2 className={`text text_type_main-medium mains`}>Начинки</h2>
         <ul className={styles.ingrediensTypeList}>
-          {mains.map((item, index) => <li key={index}><IngredientPlate {...item} onDetail={props.onDetail} /></li>)}
+          {mains.map((item, index) => <li key={index}><IngredientPlate settings={item} onDetail={props.onDetail} /></li>)}
         </ul>
       </article>
     </section>
@@ -53,6 +53,7 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
-    burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType))
+  ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  onDetail: PropTypes.func
 };

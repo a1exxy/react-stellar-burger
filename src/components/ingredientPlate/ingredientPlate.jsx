@@ -1,30 +1,27 @@
 // Плитка ингедиента
-import React, {useEffect} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styles from "./ingredientPlate.module.css";
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import {apiItemType} from '../../utils/api'
 export default function IngredientPlate(props) {
-
+  const count = props.settings.counter && props.settings.counter > 0 ? props.settings.counter : null
   const plate =
-    <div className={styles.ingredientPlate} onClick={props.onDetail}>
-      <img className={'ml-4'} src={props.image} alt={props.name}/>
-      {props.counter &&
-        <Counter count={props.counter} size="default" extraClass="" />
-      }
+    <div className={styles.ingredientPlate} onClick={e => props.onDetail(props.settings)}>
+      <img className={'ml-4'} src={props.settings.image} alt={props.settings.name}/>
+      { count && <Counter count={count} size="default" extraClass="" /> }
       <div className={`mt-1 mb-1 ${styles.ingredientPlatePrice}`}>
-        <output className="text text_type_digits-default mr-2">{props.price}</output>
+        <output className="text text_type_digits-default mr-2">{props.settings.price}</output>
         <CurrencyIcon type="primary" />
       </div>
-      <p className={`text text_type_main-default ${styles.ingredientPlateDescription}`}>{props.name}</p>
+      <p className={`text text_type_main-default ${styles.ingredientPlateDescription}`}>{props.settings.name}</p>
     </div>
-  // useEffect(()=>{plate.addEventListener})
   return (
     plate
   )
 }
 
 IngredientPlate.propTypes = {
-  ...apiItemType,
-  counter: PropTypes.number
+  settings: PropTypes.shape({...apiItemType, counter: PropTypes.number}),
+  onDetail: PropTypes.func
 }

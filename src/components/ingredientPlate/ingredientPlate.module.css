@@ -1,7 +1,10 @@
 .ingredientPlate {
+  /*display: block;*/
   position: relative;
   width: 272px;
   height: 208px;
+  /*background-color: rgba(0,0,0,0);*/
+  /*border: 0;*/
 }
 
 .ingredientPlateDescription {

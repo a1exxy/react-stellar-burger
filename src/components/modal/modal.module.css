@@ -4,7 +4,19 @@
   z-index: 20;
   position: relative;
   width: 720px;
-  height: 500px;
+  visibility: visible;
+}
+
+.modalContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modalCloseButton {
@@ -16,13 +28,6 @@
   cursor: pointer;
   display: block;
 }
-
-/*.modalHeader {*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*  align-items: center;*/
-/*  height: 64px;*/
-/*}*/
 
 .modalBody {
   display: flex;

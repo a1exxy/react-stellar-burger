@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 export default function BurgerConstructor(props) {
   const bun = props.burgerContent.filter(e=>e.type === 'bun')
   const burgerMains= props.burgerContent.filter(e=>e.type !== 'bun')
+  const burgerPrice = props.burgerContent.reduce((sum,item)=> sum + item.price,0)
   if (bun.length > 1) console.error(`Булок больше одной`)
   return (
     <section className={styles.burgerConstructor}>
@@ -41,10 +42,10 @@ export default function BurgerConstructor(props) {
         </div>
       </div>
       <div className={styles.sumLine} style={{textAlign: "right"}}>
-        <output className="text text_type_digits-medium mr-2">610</output>
+        <output className="text text_type_digits-medium mr-2">{burgerPrice}</output>
         <CurrencyIcon type="primary" />
         <div className='ml-10'>
-          <Button  htmlType="button" type="primary" size="medium">Оформить заказ</Button>
+          <Button  htmlType="button" type="primary" size="medium" onClick={e => props.onOrder(props)}>Оформить заказ</Button>
         </div>
       </div>
     </>}
@@ -53,6 +54,7 @@ export default function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
-    burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType))
+  ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  onOrder: PropTypes.func
 };
