@@ -18,8 +18,6 @@ function App() {
   const [state, setState] = useState({
     isLoading: false,
     hasError: false,
-    // ingredients: [],
-    // burgerContent: []
   })
   const [ingredients, setIngredients] = useState([])
   const [burgerContent, setBurgerContent] = useState([])
