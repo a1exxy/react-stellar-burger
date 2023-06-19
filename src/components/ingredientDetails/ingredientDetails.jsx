@@ -2,6 +2,7 @@
 
 import PropTypes from "prop-types";
 import styles from "./ingredientDetails.module.css";
+import {apiItemType} from "../../utils/api";
 
 export default function IngredientDetails(props) {
   return (
@@ -32,5 +33,5 @@ export default function IngredientDetails(props) {
 }
 
 IngredientDetails.propTypes = {
-
+  ...apiItemType
 }
