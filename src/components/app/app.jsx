@@ -18,9 +18,11 @@ function App() {
   const [state, setState] = useState({
     isLoading: false,
     hasError: false,
-    ingredients: [],
-    burgerContent: []
+    // ingredients: [],
+    // burgerContent: []
   })
+  const [ingredients, setIngredients] = useState([])
+  const [burgerContent, setBurgerContent] = useState([])
   const [modal, setModal] = useState({
     visible: false,
     body: null
@@ -31,21 +33,28 @@ function App() {
   }
   // Загрузка данных из API
   useEffect(()=>{
-    setState({...state, isLoading: true})
-    fetch(process.env.REACT_APP_API_INGREDIENTS_URL)
-    .then(response => response.json())
-    .then(result=>{
-      setState({
-        ...state ,
-        isLoading: false,
-        hasError: false,
-        ingredients: result.data,
-        burgerContent: hardCodeBurgerContentID.map(item => result.data[item])})
-    })
-    .catch(err => {
-      setState({...state, isLoading: false, hasError: true, ingredients: [], burgerContent: []})
-      console.error(`Fetch error: ${err}`)
-    })
+    setState({isLoading: true, hasError: false})
+    try {
+      fetch(process.env.REACT_APP_API_INGREDIENTS_URL, {method:'GET', redirect:'follow'})
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Ответ сети был не OK`);
+          }
+          return response.json()
+        })
+        .then(result => {
+          setState({isLoading: false, hasError: false})
+          setIngredients(result.data)
+          setBurgerContent(hardCodeBurgerContentID.map(item => result.data[item]))
+        })
+        .catch(err => {
+          setState({isLoading: false, hasError: true})
+          console.error(`[Fetch error]: ${err}`);
+        })
+    } catch(error) {
+      setState({isLoading: false, hasError: true})
+      console.error(error.message);
+    }
     document.addEventListener('keydown', handleEscBtn)
   },[])
 
@@ -59,8 +68,8 @@ function App() {
         <div className={styles.app}>
           <AppHeader/>
           <main className={styles.main}>
-            <BurgerIngredients ingredients={state.ingredients} burgerContent={state.burgerContent} onDetail={onDetail}/>
-            <BurgerConstructor ingredients={state.ingredients} burgerContent={state.burgerContent} onOrder={onOrder}/>
+            <BurgerIngredients ingredients={ingredients} burgerContent={burgerContent} onDetail={onDetail}/>
+            <BurgerConstructor ingredients={ingredients} burgerContent={burgerContent} onOrder={onOrder}/>
           </main>
         </div>
       }

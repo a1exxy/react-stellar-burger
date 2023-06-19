@@ -1,8 +1,8 @@
 // Детали ингредиента
 
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import styles from "./ingredientDetails.module.css";
-import {apiItemType} from "../../utils/api";
+import {ingredientPropType} from '../../utils/prop-types'
 
 export default function IngredientDetails(props) {
   return (
@@ -32,6 +32,4 @@ export default function IngredientDetails(props) {
   )
 }
 
-IngredientDetails.propTypes = {
-  ...apiItemType
-}
+IngredientDetails.propTypes = ingredientPropType

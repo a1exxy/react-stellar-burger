@@ -2,8 +2,9 @@
 import React from "react";
 import {Button, CurrencyIcon, ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burgerConstructor.module.css'
-import {apiItemType} from '../../utils/api'
+import {ingredientPropType} from '../../utils/prop-types'
 import PropTypes from "prop-types";
+
 export default function BurgerConstructor(props) {
   const bun = props.burgerContent.filter(e=>e.type === 'bun')
   const burgerMains= props.burgerContent.filter(e=>e.type !== 'bun')
@@ -12,7 +13,7 @@ export default function BurgerConstructor(props) {
   return (
     <section className={styles.burgerConstructor}>
       { props.burgerContent.length > 0 && <>
-      <div className='mt-25 ml-4' style={{ display: 'flex', flexDirection: 'column', gap: '16px'}}>
+      <div className={`mt-25 ml-4 ${styles.burgerContentList}`}>
         <div className={'ml-8'}>
           <ConstructorElement
             type="top"
@@ -41,7 +42,7 @@ export default function BurgerConstructor(props) {
           />
         </div>
       </div>
-      <div className={styles.sumLine} style={{textAlign: "right"}}>
+      <div className={styles.sumLine}>
         <output className="text text_type_digits-medium mr-2">{burgerPrice}</output>
         <CurrencyIcon type="primary" />
         <div className='ml-10'>
@@ -54,7 +55,7 @@ export default function BurgerConstructor(props) {
 }
 
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
-  burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  ingredients: PropTypes.arrayOf(ingredientPropType),
+  burgerContent: PropTypes.arrayOf(ingredientPropType),
   onOrder: PropTypes.func
 };

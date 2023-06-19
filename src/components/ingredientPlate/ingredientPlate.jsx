@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./ingredientPlate.module.css";
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import {apiItemType} from '../../utils/api'
+import {ingredientAndCounterPropType} from '../../utils/prop-types'
 export default function IngredientPlate(props) {
   const count = props.settings.counter && props.settings.counter > 0 ? props.settings.counter : null
   const plate =
@@ -22,6 +22,6 @@ export default function IngredientPlate(props) {
 }
 
 IngredientPlate.propTypes = {
-  settings: PropTypes.shape({...apiItemType, counter: PropTypes.number}),
+  settings: ingredientAndCounterPropType,
   onDetail: PropTypes.func
 }

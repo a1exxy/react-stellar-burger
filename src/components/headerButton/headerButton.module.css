@@ -8,6 +8,7 @@
   box-sizing: border-box;
   cursor: pointer;
   color: #8585AD;
+  text-decoration: none;
 }
 
 .headerButtonTextActive {

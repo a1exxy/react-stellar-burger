@@ -4,7 +4,7 @@ import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
 import IngredientPlate from '../ingredientPlate/ingredientPlate'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
-import {apiItemType} from "../../utils/api";
+import {ingredientPropType} from '../../utils/prop-types'
 import PropTypes from "prop-types";
 
 export default function BurgerIngredients(props) {
@@ -53,7 +53,7 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
-  burgerContent: PropTypes.arrayOf(PropTypes.shape(apiItemType)),
+  ingredients: PropTypes.arrayOf(ingredientPropType),
+  burgerContent: PropTypes.arrayOf(ingredientPropType),
   onDetail: PropTypes.func
 };
