@@ -1,0 +1,32 @@
+.burgerIngredients {
+  width: 600px;
+  height: 912px;
+  position: relative;
+}
+
+.ingrediensList {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 664px;
+}
+
+.ingrediensTypeList {
+  margin: 0;
+  padding: 0;
+  padding-top: 24px;
+  padding-bottom: 40px;
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-column-gap: 24px;
+  grid-row-gap: 32px;
+}
+
+.ingrediensListHeader {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

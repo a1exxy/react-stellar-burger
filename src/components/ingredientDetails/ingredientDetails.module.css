@@ -1,0 +1,26 @@
+.ingredientDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.ingredientDetailsHeader {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 640px;
+  height: 64px;
+}
+.ingredientDetailsParams {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.ingredientDetailsParamsCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+

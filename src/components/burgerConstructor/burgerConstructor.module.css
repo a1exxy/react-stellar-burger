@@ -1,0 +1,36 @@
+.burgerConstructor {
+  width: 600px;
+  height: 912px;
+}
+
+.sumLine {
+  text-align: right;
+  margin-top: 40px;
+  margin-right: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.burgerContentList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.constructorList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: scroll;
+  height: 464px;
+}
+
+.constructorListItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
