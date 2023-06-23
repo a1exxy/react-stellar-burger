@@ -8,6 +8,7 @@ import OrderDetails from "../orderDetails/orderDetails";
 import IngredientDetails from "../ingredientDetails/ingredientDetails";
 import {getIngredients, createOrder} from "../../utils/api"
 import {burgerContext} from "../../services/burgerContext"
+import {ingredientContext} from "../../services/ingredientContext"
 
 const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
 
@@ -67,8 +68,10 @@ function App() {
           <AppHeader/>
           <main className={styles.main}>
             <burgerContext.Provider value={{burgerContent, setBurgerContent}}>
-              <BurgerIngredients ingredients={ingredients} onDetail={onDetail}/>
-              <BurgerConstructor onOrder={onOrder}/>
+              <ingredientContext.Provider value={{ingredients, setIngredients}}>
+                <BurgerIngredients onDetail={onDetail}/>
+                <BurgerConstructor onOrder={onOrder}/>
+              </ingredientContext.Provider>
             </burgerContext.Provider>
           </main>
         </div>

@@ -4,18 +4,19 @@ import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {useMemo, useRef, useContext} from "react";
 import IngredientPlate from '../ingredientPlate/ingredientPlate'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
-import {ingredientPropType} from '../../utils/prop-types'
 import PropTypes from "prop-types";
 import {burgerContext} from "../../services/burgerContext"
+import {ingredientContext} from "../../services/ingredientContext"
 
 
 export default function BurgerIngredients(props) {
   const {burgerContent, setBurgerContent} = useContext(burgerContext)
+  const {ingredients} = useContext(ingredientContext)
   const [currentTab, setCurrentTab] = React.useState('buns')
 
-  const buns = useMemo(() => props.ingredients.filter(e => e.type === 'bun'))
-  const mains = useMemo(() => props.ingredients.filter(e => e.type === 'main'))
-  const sauces = useMemo(() => props.ingredients.filter(e => e.type === 'sauce'))
+  const buns = useMemo(() => ingredients.filter(e => e.type === 'bun'))
+  const mains = useMemo(() => ingredients.filter(e => e.type === 'main'))
+  const sauces = useMemo(() => ingredients.filter(e => e.type === 'sauce'))
 
   const ingredientsBlocks = {
    buns: useRef(null),
@@ -29,8 +30,6 @@ export default function BurgerIngredients(props) {
   }
 
   const onPlateClick = function (evt) { // const onPlateClick = props.onDetail // TODO Вернуть при добавлении перетаскивания
-    // console.log('Run onPlateClick')
-    // console.log(evt)
     if(evt.type !== 'bun' || (evt.type === 'bun' && burgerContent.filter(e => e.type === 'bun').length === 0 )) {
       setBurgerContent([...burgerContent, evt])
     }
@@ -69,6 +68,5 @@ export default function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
   onDetail: PropTypes.func
 };
