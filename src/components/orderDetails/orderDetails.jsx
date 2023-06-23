@@ -14,5 +14,5 @@ export default function OrderDetails(props) {
   )
 }
 OrderDetails.propTypes = {
-  orderID: PropTypes.string
+  orderID: PropTypes.number
 }
