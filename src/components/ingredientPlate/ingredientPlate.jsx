@@ -1,11 +1,14 @@
 // Плитка ингедиента
-import React from "react";
+import React, {useContext} from "react";
 import PropTypes from "prop-types";
 import styles from "./ingredientPlate.module.css";
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import {ingredientAndCounterPropType} from '../../utils/prop-types'
+import {ingredientPropType} from '../../utils/prop-types'
+import {burgerContext} from "../../services/burgerContext"
+
 export default function IngredientPlate(props) {
-  const count = props.settings.counter && props.settings.counter > 0 ? props.settings.counter : null
+  const {burgerContent, setBurgerContent} = useContext(burgerContext)
+  const count = burgerContent.reduce((sum, current) => current._id === props.settings._id ? sum + 1 : sum , 0)
   const plate =
     <div className={styles.ingredientPlate} onClick={e => props.onDetail(props.settings)}>
       <img className={'ml-4'} src={props.settings.image} alt={props.settings.name}/>
@@ -22,6 +25,6 @@ export default function IngredientPlate(props) {
 }
 
 IngredientPlate.propTypes = {
-  settings: ingredientAndCounterPropType.isRequired,
+  settings: ingredientPropType.isRequired,
   onDetail: PropTypes.func.isRequired
 }
