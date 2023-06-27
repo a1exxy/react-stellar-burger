@@ -5,9 +5,14 @@ import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./modal.module.css"
 import React from "react";
 import ModalOverlay from "../modalOverlay/modalOverlay";
+import { useSelector, useDispatch } from 'react-redux';
+import {MODAL_CLOSE} from '../../services/actions/modal'
 
 export default function Modal(props) {
-  const { children, onClose } = props
+  const dispatch = useDispatch();
+  const {modal} = useSelector(store => ({ modal: store.modal }))
+  const onClose = () => dispatch({type: MODAL_CLOSE})
+
   const handleEscBtn = function (e) {
     if (e.code === 'Escape') { onClose() }
   }
@@ -22,7 +27,7 @@ export default function Modal(props) {
       <div className={`${styles.modal}`}>
         <button className={styles.modalCloseButton} onClick={onClose}><CloseIcon type="primary" /></button>
         <article className={styles.modalBody}>
-          {children}
+          {modal.body}
         </article>
       </div>
     </div>
@@ -31,5 +36,4 @@ export default function Modal(props) {
 
 Modal.propTypes = {
   modalRoot: PropTypes.object,
-  onClose: PropTypes.func
 }

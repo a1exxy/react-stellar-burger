@@ -4,6 +4,7 @@
 import styles from "./ingredientDetails.module.css";
 import {apiItemType} from '../../utils/prop-types'
 
+
 export default function IngredientDetails(props) {
   return (
     <div className={`mt-10 ml-10 mr-10 mb-15 ${styles.ingredientDetails}`}>

@@ -1,64 +1,25 @@
-import React, {useState, useEffect, createContext} from "react";
+import React, { useEffect } from "react";
 import styles from "./app.module.css";
 import AppHeader from '../appHeader/appHeader'
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
 import BurgerIngredients from "../burgerIngredients/burgerIngredients";
 import Modal from "../modal/modal";
-import OrderDetails from "../orderDetails/orderDetails";
-import IngredientDetails from "../ingredientDetails/ingredientDetails";
-import {getIngredients, createOrder} from "../../utils/api"
-import {burgerContext} from "../../services/burgerContext"
-import {ingredientContext} from "../../services/ingredientContext"
+import { getIngredients } from "../../utils/api"
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import { useSelector, useDispatch } from 'react-redux';
 
 const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
 
 function App() {
   // Загрузка приложения
-  const [state, setState] = useState({ isLoading: false, hasError: false })
-  const [ingredients, setIngredients] = useState([])
-  const [burgerContent, setBurgerContent] = useState([])
 
-  const [order, setOrder] = useState(null)
+  const dispatch = useDispatch();
+  const {state, modal } = useSelector(store => ({ state: store.loader, modal: store.modal}))
 
-  const [modal, setModal] = useState({ visible: false, body: null })
-  const closeModal = function () { setModal({visible:false, body: null}) }
-  const setStartState = function () {setState({isLoading: true, hasError: false})}
-  const setOkState = function () {setState({isLoading: false, hasError: false})}
-  const setFailState = function () {setState({isLoading: false, hasError: true})}
-
-  // Загрузка данных из API
   useEffect(()=>{
-    setStartState()
-    getIngredients()
-      .then(result => {
-        setIngredients(result.data)
-        setOkState()
-      })
-      .catch(err => {
-        setFailState()
-        console.error(err)
-      })
+    dispatch(getIngredients()) // Загрузка данных из API
   },[])
-
-  const onDetail = function (props) { setModal({visible:true, body: <IngredientDetails {...props} />}) }
-
-  const onOrder = function (components) {
-    // функция сохранения заказа
-    createOrder(components)
-      .then(result => {
-        if(result.success === true){
-          console.info(`Заказ создан`)
-          setOrder(result.order.number)
-          setModal({visible:true, body: <OrderDetails orderID={result.order.number} />})
-        }
-        else {
-          console.error(`Сервер не смог сформировать заказ (${result.message})`)
-        }
-      })
-      .catch(err => {
-        console.error(`Ошибка сохранения заказа (${err})`)
-      })
-  }
 
   return (
     <>
@@ -67,16 +28,14 @@ function App() {
         <div className={styles.app}>
           <AppHeader/>
           <main className={styles.main}>
-            <burgerContext.Provider value={{burgerContent, setBurgerContent}}>
-              <ingredientContext.Provider value={{ingredients, setIngredients}}>
-                <BurgerIngredients onDetail={onDetail}/>
-                <BurgerConstructor onOrder={onOrder}/>
-              </ingredientContext.Provider>
-            </burgerContext.Provider>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </DndProvider>
           </main>
         </div>
       }
-      { modal.visible && <Modal modalRoot={modalRoot} onClose={closeModal}>{modal.body}</Modal> }
+      { modal.visible && <Modal modalRoot={modalRoot}></Modal> }
     </>
   );
 }

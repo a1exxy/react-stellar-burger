@@ -1,66 +1,74 @@
 // конструктор бургера
-import React, {useContext, useReducer} from "react";
+import React, {useMemo} from "react";
 import {Button, CurrencyIcon, ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burgerConstructor.module.css'
-import PropTypes from "prop-types";
-import {burgerContext, priceContext} from "../../services/burgerContext"
+import { useDrag, useDrop } from "react-dnd";
+import { useSelector, useDispatch } from 'react-redux';
+import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM} from '../../services/actions/burger'
+import {createOrder} from "../../utils/api"
+import {MODAL_OPEN} from '../../services/actions/modal'
+import OrderDetails from "../orderDetails/orderDetails";
+import BurgerConstructorItem from './burgerConstructorItem/bugerConstructorItem'
 
-const priceInitialState = 0
+export default function BurgerConstructor() {
+  const { burgerContent } = useSelector(store => ({ burgerContent: store.burger }))
+  const dispatch = useDispatch();
 
-export default function BurgerConstructor(props) {
-  const {burgerContent, setBurgerContent} = useContext(burgerContext)
-  const bun = burgerContent.filter(e => e.type === 'bun')
-  const burgerMains= burgerContent.filter(e => e.type !== 'bun')
-  const burgerPrice = burgerContent.reduce((sum,item) => sum + item.price, 0)
-  const burgerContentList = burgerContent.map(e => e._id)
-  if (bun.length > 1) console.error(`Булок больше одной`)
+  const [{isHover}, dropTarget] = useDrop({
+      accept: "items",
+      drop(item) {
+        console.log('run useDrop1')
+        console.log(item)
+        dispatch({type: BURGER_ADD_ELEM, content: item})
+      },
+      collect: monitor => ({
+          isHover: monitor.isOver(),
+      })
+  });
+
+  const onOrder = () => {
+    dispatch(createOrder(burgerContent.map(e => e._id)))
+    dispatch({type: MODAL_OPEN, body: <OrderDetails/>})
+  }
 
   return (
     <section className={styles.burgerConstructor}>
-      <div className={`mt-25 ml-4 ${styles.burgerContentList}`}>
-        { bun.length > 0 && <>
+      <div ref={dropTarget}  className={`mt-25 ml-4 ${styles.burgerContentList} ${isHover && styles.burgerContentListIllumination}`}>
           <div className={'ml-8'}>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={bun[0].name}
-              price={bun[0].price}
-              thumbnail={bun[0].image}
-            />
+            { burgerContent.bun &&
+              <ConstructorElement
+                type="top"
+                isLocked={true}
+                text={burgerContent.bun.name}
+                price={burgerContent.bun.price}
+                thumbnail={burgerContent.bun.image}
+              />
+            }
           </div>
-        </>}
-        <ul className={`custom-scroll ${styles.constructorList}`}>
-          { burgerMains.map((item, index) =>
-              <li key={index} className={styles.constructorListItem}>
-                <DragIcon type="primary"/>
-                <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
-              </li>
-            )
-          }
-        </ul>
-        { bun.length > 0 && <>
+          <ul className={`custom-scroll ${styles.constructorList}`}>
+             { burgerContent.ingredients.map((item, index) =>
+               <BurgerConstructorItem key={item.uuid} element={item} elementIndex={index} />
+             )}
+          </ul>
           <div className={'ml-8'}>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={bun[0].name}
-              price={bun[0].price}
-              thumbnail={bun[0].image}
-            />
+            { burgerContent.bun &&
+              <ConstructorElement
+                type="bottom"
+                isLocked={true}
+                text={burgerContent.bun.name}
+                price={burgerContent.bun.price}
+                thumbnail={burgerContent.bun.image}
+              />
+            }
           </div>
-        </>}
       </div>
       <div className={styles.sumLine}>
-        <output className="text text_type_digits-medium mr-2">{burgerPrice}</output>
+        <output className="text text_type_digits-medium mr-2">{burgerContent.sum}</output>
         <CurrencyIcon type="primary" />
         <div className='ml-10'>
-          <Button htmlType="button"  type="primary" size="medium" onClick={e => props.onOrder(burgerContentList)}>Оформить заказ</Button>
+          <Button htmlType="button"  type="primary" size="medium" onClick={onOrder}>Оформить заказ</Button>
         </div>
       </div>
     </section>
   )
 }
-
-BurgerConstructor.propTypes = {
-  onOrder: PropTypes.func.isRequired
-};

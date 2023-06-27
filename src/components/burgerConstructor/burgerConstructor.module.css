@@ -12,10 +12,19 @@
   align-items: center;
 }
 
+.dragIcon {
+  cursor: move;
+}
+
 .burgerContentList {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.burgerContentListIllumination {
+  border: 3px solid green;
+  border-radius: 40px;
 }
 
 .constructorList {
@@ -27,10 +36,4 @@
   gap: 16px;
   overflow-y: scroll;
   height: 464px;
-}
-
-.constructorListItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
