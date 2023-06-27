@@ -4,7 +4,7 @@ import styles from "./orderDetails.module.css"
 import checkImg from "../../images/check.svg"
 
 export default function OrderDetails() {
-  const { order } = useSelector(store => ({ order: store.order }))
+  const order = useSelector(store => store.order )
   return (
     <div className={`mt-30 mb-30 ${styles.orderDetails}`}>
       <p className={'text text_type_digits-large'}>{order.number}</p>

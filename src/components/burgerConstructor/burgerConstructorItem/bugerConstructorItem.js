@@ -4,9 +4,11 @@ import styles from './burgerConstructorItem.module.css'
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from 'react-redux';
 import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM, BURGER_MOVE_ELEM} from '../../../services/actions/burger'
+import {burgerConstructorItemElementPropType} from '../../../utils/prop-types'
+import PropTypes from "prop-types";
 export default function BurgerConstructorItem ({element, elementIndex}) {
     const ref = useRef(null)
-    const { burgerContent } = useSelector(store => ({ burgerContent: store.burger }))
+    const burgerContent = useSelector(store => store.burger)
     const dispatch = useDispatch();
     const burgerItemType = 'burgerItemType'
 
@@ -23,7 +25,6 @@ export default function BurgerConstructorItem ({element, elementIndex}) {
           const { id: droppedId, originalIndex } = item
           const didDrop = monitor.didDrop()
           if (!didDrop) {
-            console.log('Возврат')
             const dragIndex = findIndex(item.uuid)
             const hoverIndex = findIndex(element.uuid)
             dispatch({type: BURGER_MOVE_ELEM, from:hoverIndex, to:dragIndex})
@@ -68,7 +69,6 @@ export default function BurgerConstructorItem ({element, elementIndex}) {
         if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
           return
         }
-          console.log(`go to MOVE`)
           dispatch({type: BURGER_MOVE_ELEM, from:dragIndex, to:hoverIndex})
       },
     }),
@@ -87,4 +87,9 @@ export default function BurgerConstructorItem ({element, elementIndex}) {
       </li>
     </>
   )
+}
+
+BurgerConstructorItem.propTypes = {
+  element: burgerConstructorItemElementPropType,
+  elementIndex: PropTypes.number
 }

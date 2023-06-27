@@ -15,7 +15,8 @@ function App() {
   // Загрузка приложения
 
   const dispatch = useDispatch();
-  const {state, modal } = useSelector(store => ({ state: store.loader, modal: store.modal}))
+  const state = useSelector(store => store.loader)
+  const modal = useSelector(store => store.modal)
 
   useEffect(()=>{
     dispatch(getIngredients()) // Загрузка данных из API

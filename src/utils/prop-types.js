@@ -24,4 +24,10 @@ const ingredientAndCounterPropType = PropTypes.shape({
   counter: PropTypes.number
 })
 
-export {apiItemType, ingredientPropType, ingredientAndCounterPropType}
+const burgerConstructorItemElementPropType = PropTypes.shape({
+  ...apiItemType,
+  uuid: PropTypes.string
+})
+
+export {apiItemType, ingredientPropType, ingredientAndCounterPropType, burgerConstructorItemElementPropType}
+

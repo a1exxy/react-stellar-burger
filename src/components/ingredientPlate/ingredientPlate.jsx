@@ -10,10 +10,9 @@ import IngredientDetails from "../ingredientDetails/ingredientDetails"
 
 export default function IngredientPlate({settings}) {
   const dispatch = useDispatch();
-  const { burgerContent } = useSelector(store => ({ burgerContent: store.burger }))
+  const burgerContent = useSelector(store => store.burger)
   const onDetail = (body) => { dispatch({type: MODAL_OPEN, body: <IngredientDetails {...body} />}) }
-  // const count = useMemo(() => burgerContent.ingredients.reduce((sum, current) => current._id === settings._id ? sum + 1 : sum , 0), [burgerContent.ingredients])
-  const count = burgerContent.counters[settings._id] ? burgerContent.counters[settings._id] : null
+  const count = useMemo(() => burgerContent.ingredients.reduce((sum, current) => current._id === settings._id ? sum + 1 : sum , 0), [burgerContent.ingredients])
   const [{ plateOpacity }, dragTarget] = useDrag({
     type: 'items',
     item: settings ,

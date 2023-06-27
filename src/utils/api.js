@@ -34,7 +34,7 @@ export function getIngredients () {
   }
 }
 
-export function createOrder (companents) {
+export function createOrder ({companents, onSuccess}) {
   return function (dispatch) {
     dispatch({type: CLEAR_ORDER})
     fetch(ordersURL, {
@@ -51,7 +51,7 @@ export function createOrder (companents) {
     })
     .then(response => {
       if(response.success === true) {
-          dispatch({type: SET_ORDER, number: response.order.number, content: companents})
+        onSuccess({orderNum: response.order.number, content: companents})
       } else {
           Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
       }

@@ -9,26 +9,32 @@ import {createOrder} from "../../utils/api"
 import {MODAL_OPEN} from '../../services/actions/modal'
 import OrderDetails from "../orderDetails/orderDetails";
 import BurgerConstructorItem from './burgerConstructorItem/bugerConstructorItem'
+import {SET_ORDER} from '../../services/actions/order'
 
 export default function BurgerConstructor() {
-  const { burgerContent } = useSelector(store => ({ burgerContent: store.burger }))
+  const burgerContent = useSelector(store => store.burger)
   const dispatch = useDispatch();
+
+  const bunPrice = useMemo(()=> burgerContent.bun ? burgerContent.bun.price : 0, [burgerContent.bun])
+  const burgerPrice = useMemo(()=>burgerContent.ingredients.reduce((sum,item) => sum + item.price, 0) + bunPrice, [burgerContent.ingredients, bunPrice])
 
   const [{isHover}, dropTarget] = useDrop({
       accept: "items",
       drop(item) {
-        console.log('run useDrop1')
-        console.log(item)
         dispatch({type: BURGER_ADD_ELEM, content: item})
       },
       collect: monitor => ({
           isHover: monitor.isOver(),
       })
   });
-
-  const onOrder = () => {
-    dispatch(createOrder(burgerContent.map(e => e._id)))
+  const createOrderSuccess = ({orderNum, content}) => {
+    dispatch({type: SET_ORDER, number: orderNum, content: content})
     dispatch({type: MODAL_OPEN, body: <OrderDetails/>})
+  }
+  const onOrder = () => {
+    let ids = burgerContent.ingredients.map(e => e._id)
+    if(burgerContent.bun) { ids = [...ids, burgerContent.bun._id] }
+    dispatch(createOrder({ companents: ids, onSuccess: createOrderSuccess }))
   }
 
   return (
@@ -63,7 +69,7 @@ export default function BurgerConstructor() {
           </div>
       </div>
       <div className={styles.sumLine}>
-        <output className="text text_type_digits-medium mr-2">{burgerContent.sum}</output>
+        <output className="text text_type_digits-medium mr-2">{burgerPrice}</output>
         <CurrencyIcon type="primary" />
         <div className='ml-10'>
           <Button htmlType="button"  type="primary" size="medium" onClick={onOrder}>Оформить заказ</Button>

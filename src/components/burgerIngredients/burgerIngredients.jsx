@@ -6,7 +6,7 @@ import IngredientPlate from '../ingredientPlate/ingredientPlate'
 import { useSelector } from 'react-redux';
 
 export default function BurgerIngredients() {
-  const { ingredients } = useSelector(store => ({ ingredients: store.loader.feed }))
+  const ingredients = useSelector(store => store.loader.feed )
 
   const [currentTab, setCurrentTab] = React.useState('buns')
 
