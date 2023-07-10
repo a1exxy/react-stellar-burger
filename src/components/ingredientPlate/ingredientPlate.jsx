@@ -1,30 +1,39 @@
 // Плитка ингедиента
-import React, {useContext} from "react";
-import PropTypes from "prop-types";
+import React, {useMemo} from "react";
 import styles from "./ingredientPlate.module.css";
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import {ingredientPropType} from '../../utils/prop-types'
-import {burgerContext} from "../../services/burgerContext"
+import { useDrag } from 'react-dnd';
+import { useSelector, useDispatch } from 'react-redux';
+import {MODAL_OPEN} from '../../services/actions/modal'
+import IngredientDetails from "../ingredientDetails/ingredientDetails"
 
-export default function IngredientPlate(props) {
-  const {burgerContent, setBurgerContent} = useContext(burgerContext)
-  const count = burgerContent.reduce((sum, current) => current._id === props.settings._id ? sum + 1 : sum , 0)
-  const plate =
-    <div className={styles.ingredientPlate} onClick={e => props.onDetail(props.settings)}>
-      <img className={'ml-4'} src={props.settings.image} alt={props.settings.name}/>
+export default function IngredientPlate({settings}) {
+  const dispatch = useDispatch();
+  const burgerContent = useSelector(store => store.burger)
+  const onDetail = (body) => { dispatch({type: MODAL_OPEN, body: <IngredientDetails {...body} />}) }
+  const count = useMemo(() => burgerContent.ingredients.reduce((sum, current) => current._id === settings._id ? sum + 1 : sum , 0), [burgerContent.ingredients])
+  const [{ plateOpacity }, dragTarget] = useDrag({
+    type: 'items',
+    item: settings ,
+    collect: monitor => ({
+      plateOpacity: monitor.isDragging() ? 0.5 : 1
+    })
+  })
+
+  return (
+    <div ref={dragTarget} className={styles.ingredientPlate} style={{opacity: `${plateOpacity}`}} onClick={e => onDetail(settings)}>
+      <img className={'ml-4'} src={settings.image} alt={settings.name}/>
       { count && <Counter count={count} size="default" extraClass="" /> }
       <div className={`mt-1 mb-1 ${styles.ingredientPlatePrice}`}>
-        <output className="text text_type_digits-default mr-2">{props.settings.price}</output>
+        <output className="text text_type_digits-default mr-2">{settings.price}</output>
         <CurrencyIcon type="primary" />
       </div>
-      <p className={`text text_type_main-default ${styles.ingredientPlateDescription}`}>{props.settings.name}</p>
+      <p className={`text text_type_main-default ${styles.ingredientPlateDescription}`}>{settings.name}</p>
     </div>
-  return (
-    plate
   )
 }
 
 IngredientPlate.propTypes = {
   settings: ingredientPropType.isRequired,
-  onDetail: PropTypes.func.isRequired
 }
