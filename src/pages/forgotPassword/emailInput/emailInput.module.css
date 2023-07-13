@@ -1,0 +1,19 @@
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 180px;
+  gap: 24px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.regText {
+  margin-top: 56px;
+}
+.recoveryText {
+  margin-top: -8px;
+}

@@ -1,44 +1,28 @@
 import React, { useEffect } from "react";
-import styles from "./app.module.css";
-import AppHeader from '../appHeader/appHeader'
-import BurgerConstructor from "../burgerConstructor/burgerConstructor";
-import BurgerIngredients from "../burgerIngredients/burgerIngredients";
-import Modal from "../modal/modal";
-import { getIngredients } from "../../utils/api"
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Index } from '../../pages/index'
+import { NotFound404 } from '../../pages/notFound404/notFound404'
+import Login from '../../pages/login/login'
+import Register from '../../pages/register/register'
+import EmailInput from '../../pages/forgotPassword/emailInput/emailInput'
+import Profile from '../../pages/profile/profile'
 
-const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
-
-function App() {
-  // Загрузка приложения
-
-  const dispatch = useDispatch();
-  const state = useSelector(store => store.loader)
-  const modal = useSelector(store => store.modal)
-
-  useEffect(()=>{
-    dispatch(getIngredients()) // Загрузка данных из API
-  },[])
-
+export default function App() {
   return (
-    <>
-      { state.isLoading ? <p className={`text text_type_main-large`}>Данные загружаются...</p> :
-        state.hasError ? <p className={`text text_type_main-large`}>Ошибка загрузки данных...</p> :
-        <div className={styles.app}>
-          <AppHeader/>
-          <main className={styles.main}>
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </DndProvider>
-          </main>
-        </div>
-      }
-      { modal.visible && <Modal modalRoot={modalRoot}></Modal> }
-    </>
-  );
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />}/>
+        <Route path="/register" element={<Register />}/>
+        <Route path="/forgot-password" element={<EmailInput />}/>
+        <Route path="/profile" element={<Profile />}/>
+        <Route path="/ingredients/:id" element={<NotFound404 />}/>
+        {/*  URL для Step-2  */}
+        {/*<Route path="/feed" element={<NotFound404 />}/> */}
+        {/*<Route path="/orders" element={<NotFound404 />}/>*/}
+        {/* ----------------- */}
+        <Route path="/" element={<Index />}/>
+        <Route path="*" element={<NotFound404 />}/>
+      </Routes>
+    </Router>
+  )
 }
-
-export default App;

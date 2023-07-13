@@ -1,0 +1,17 @@
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 180px;
+  gap: 24px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.loginText {
+  margin-top: 56px;
+}
+

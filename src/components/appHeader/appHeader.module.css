@@ -11,6 +11,9 @@
   justify-content: flex-start;
   gap: 8px;
 }
+.link {
+  text-decoration: none;
+}
 
 .logo {
   margin: auto;
