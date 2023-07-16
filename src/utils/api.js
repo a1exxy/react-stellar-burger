@@ -7,9 +7,8 @@ import {LOGGED_IN, LOGGED_OUT, USER_UPDATED, USER_CHECKED} from '../services/act
 const apiURL = process.env.REACT_APP_API
 const baseOptions = {method:'GET', headers: {"Content-Type": "application/json;charset=utf-8"}, redirect: 'follow'}
 
-
-const ingredientsURL = process.env.REACT_APP_API_INGREDIENTS_URL
-const ordersURL = process.env.REACT_APP_API_ORDERS
+const ingredientsURL = apiURL + '/ingredients'
+const ordersURL = apiURL + '/orders'
 
 const options = {method:'GET', redirect:'follow'}
 export function getIngredients () {
@@ -255,7 +254,6 @@ export const passwdReset = ({dispatch, email, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      // dispatch({type: USER_SET_RECOVERY_EMAIL, recoveryEmail: email})
       console.log(res)
       redirect()
     } else {
@@ -264,7 +262,7 @@ export const passwdReset = ({dispatch, email, redirect}) => {
   })
   .catch(e => console.error(e))
 }
-//{"name":"aaaa","email":"a1exx.y@ya.ru","password":"aaaa"}
+
 export const setNewPasswd = ({passwd, code, redirect}) => {
   console.info(`Run apiAuth.setNewPasswd`)
   request({
@@ -274,8 +272,7 @@ export const setNewPasswd = ({passwd, code, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      // dispatch({type: USER_SET_RECOVERY_EMAIL, recoveryEmail: email})
-      console.error(res)
+      console.log(res)
       redirect()
     } else {
       console.error(`Не удолось установить пароль`)
