@@ -5,16 +5,21 @@ import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./modal.module.css"
 import React from "react";
 import ModalOverlay from "../modalOverlay/modalOverlay";
-import { useSelector, useDispatch } from 'react-redux';
-import {MODAL_CLOSE} from '../../services/actions/modal'
+import { MODAL_CLOSE } from '../../services/actions/modal'
+import { useNavigate } from 'react-router-dom'
+
+const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
 
 export default function Modal(props) {
-  const dispatch = useDispatch();
-  const {modal} = useSelector(store => ({ modal: store.modal }))
-  const onClose = () => dispatch({type: MODAL_CLOSE})
-
+  const navigate = useNavigate()
+  const body = props.children
+  console.log(body)
+  const handleModalClose = () => {
+    // Возвращаемся к предыдущему пути при закрытии модалки
+    navigate(-1);
+  };
   const handleEscBtn = function (e) {
-    if (e.code === 'Escape') { onClose() }
+    if (e.code === 'Escape') { handleModalClose() }
   }
   useEffect(()=>{
     document.addEventListener('keydown', handleEscBtn)
@@ -23,17 +28,17 @@ export default function Modal(props) {
 
   return ReactDOM.createPortal(
     <div className={styles.modalContainer}>
-      <ModalOverlay onClose={onClose} />
+      <ModalOverlay onClose={handleModalClose} />
       <div className={`${styles.modal}`}>
-        <button className={styles.modalCloseButton} onClick={onClose}><CloseIcon type="primary" /></button>
+        <button className={styles.modalCloseButton} onClick={handleModalClose}><CloseIcon type="primary" /></button>
         <article className={styles.modalBody}>
-          {modal.body}
+          {body}
         </article>
       </div>
     </div>
-  , props.modalRoot)
+  , modalRoot)
 }
 
 Modal.propTypes = {
-  modalRoot: PropTypes.object,
+  // modalRoot: PropTypes.object,
 }

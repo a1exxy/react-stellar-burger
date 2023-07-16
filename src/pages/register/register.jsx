@@ -1,24 +1,38 @@
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from './register.module.css'
-import AppHeader from "../../components/appHeader/appHeader"
 import { Link } from 'react-router-dom';
+import { register } from '../../utils/api'
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Register() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [passwd, setPasswd] = React.useState('')
+
   const nameRef = React.useRef(null)
   const emailRef = React.useRef(null)
   const passwdRef = React.useRef(null)
-  const onIconClick = () => {
-    setTimeout(() => emailRef.current.focus(), 0)
-    alert('Icon Click Callback')
+
+  const [viewPass, setViewPass] = useState(false)
+  const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
+  useEffect(()=> {
+    viewPass ? passwdRef.current.type = 'text' : passwdRef.current.type = 'password'
+  }, [viewPass])
+
+  const onRegister = (evt) => {
+    evt.preventDefault()
+    if(register({dispatch:dispatch, name:name, email:email, passwd:passwd})){
+      navigate("/profile");
+    }
+
   }
   return (
     <>
-      <AppHeader />
-      <div className={styles.content}>
+      <form className={styles.content}>
         <p className="text text_type_main-medium">Регистрация</p>
         <Input
           type={'text'}
@@ -59,7 +73,7 @@ export default function Register() {
           extraClass="ml-1"
         />
         <Link to='/' className={styles.link}>
-          <Button htmlType="button" type="primary" size="medium">
+          <Button htmlType="submit" type="primary" size="medium" onClick={onRegister}>
             Зарегистрироваться
           </Button>
         </Link>
@@ -67,7 +81,7 @@ export default function Register() {
         <p className={`${styles.loginText} text text_type_main-default mt-14`}>
           Уже зарегистрированы? <Link to='/login' className={styles.link}>Войти</Link>
         </p>
-      </div>
+      </form>
     </>
   )
 }

@@ -1,31 +1,60 @@
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./profile.module.css"
 import React from "react";
-import AppHeader from "../../components/appHeader/appHeader"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {updateUser, logout} from '../../utils/api'
+
+const viewPasswd = '*****'
+
 export default function Profile() {
-  const [name, setName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [passwd, setPasswd] = React.useState('')
+  const {user, email} = useSelector(store => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const [name, setName] = React.useState(user)
+  const [login, setEmail] = React.useState(email)
+
+  const [passwd, setPasswd] = React.useState(viewPasswd)
+  const [edit, setEdit] = React.useState({name:true, email:true, passwd:true})
+
+
   const nameRef = React.useRef(null)
   const emailRef = React.useRef(null)
   const passwdRef = React.useRef(null)
-  const onIconClick = () => {
-    setTimeout(() => emailRef.current.focus(), 0)
-    alert('Icon Click Callback')
+  const onEditIconClick = (ref) => {
+    console.log(ref)
+    setEdit({...edit, [ref.current.name]:false})
+    setTimeout(() => ref.current.focus(), 0)
+  }
+  const onCancel = () => {
+    setPasswd(viewPasswd)
+    setName(user)
+    setEmail(email)
+    setEdit({name:true, email:true, passwd:true})
+  }
+  const onSave = (evt) => {
+    evt.preventDefault()
+    console.log(`Save update profile`)
+    updateUser({dispatch: dispatch, name: name, email:login, passwd:passwd})
+    setEdit({name:true, email:true, passwd:true})
+    // console.log(user)
+  }
+  const onLogout = (evt) => {
+    logout(dispatch)
+    navigate('/')
   }
   return (
     <>
-      <AppHeader />
       <div className={styles.content}>
         <div className={styles.links}>
           <p className={`text text_type_main-medium ${styles.cell}`}>Профиль</p>
-          <Link to='/' className={styles.link}><p className={`text text_type_main-medium ${styles.cell}`}>История заказов</p></Link>
-          <Link to='/' className={styles.link}><p className={`text text_type_main-medium ${styles.cell}`}>Выход</p></Link>
-          <p className={`text text_type_main-small text_color_inactive ${styles.description}`}>В этом разделе вы можете изменить свои персональные данные</p>
+          <Link to='/profile/orders' className={styles.link}><p className={`text text_type_main-medium ${styles.cell}`}>История заказов</p></Link>
+          <button className={`text text_type_main-medium ${styles.cell} ${styles.link}`} onClick={onLogout}> Выход </button>
+          <p className={`text text_type_main-default text_color_inactive ${styles.description}`}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>
 
-        <div className={styles.inputs}>
+        <form className={styles.inputs}>
           <Input
             type={'text'}
             placeholder={'Имя'}
@@ -34,23 +63,27 @@ export default function Profile() {
             value={name}
             name={'name'}
             error={false}
-            ref={emailRef}
+            ref={nameRef}
+            onIconClick={() => onEditIconClick(nameRef)}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
+            disabled={edit.name}
           />
           <Input
             type={'email'}
-            placeholder={'E-mail'}
+            placeholder={'Логин'}
             onChange={e => setEmail(e.target.value)}
             icon={'EditIcon'}
-            value={email}
+            value={login}
             name={'email'}
             error={false}
             ref={emailRef}
+            onIconClick={() => onEditIconClick(emailRef)}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
+            disabled={edit.email}
           />
           <Input
             type={'password'}
@@ -61,12 +94,19 @@ export default function Profile() {
             name={'passwd'}
             error={false}
             ref={passwdRef}
-            onIconClick={onIconClick}
+            onIconClick={() => onEditIconClick(passwdRef)}
             errorText={'Ошибка'}
             size={'default'}
             extraClass="ml-1"
+            disabled={edit.passwd}
           />
-        </div>
+          { (!edit.name || !edit.email || !edit.passwd ) &&
+            <div className={styles.buttons}>
+              <Button htmlType="button" type="secondary" size="medium" onClick={onCancel}>Отмена</Button>
+              <Button htmlType="submit" type="primary" size="medium" onClick={onSave}>Сохранить</Button>
+            </div>
+          }
+        </form>
       </div>
     </>
 

@@ -16,3 +16,6 @@
 ## Для запуска:
 В директории проекта должен быть файл .env со следующем содержимым:
 `REACT_APP_API_INGREDIENTS_URL='https://norma.nomoreparties.space/api/ingredients'`
+
+Документация UI Kit:
+https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/typography

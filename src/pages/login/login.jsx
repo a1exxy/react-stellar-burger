@@ -1,32 +1,43 @@
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styles from './login.module.css'
-import AppHeader from "../../components/appHeader/appHeader"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../../utils/api'
+import { useSelector, useDispatch } from 'react-redux';
+
 
 export default function Login() {
-  const [email, setEmail] = React.useState('')
-  const [passwd, setPasswd] = React.useState('')
-  const emailRef = React.useRef(null)
-  const passwdRef = React.useRef(null)
-  const onIconClick = () => {
-    setTimeout(() => emailRef.current.focus(), 0)
-    alert('Icon Click Callback')
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [inputEmail, setInputEmail] = useState('')
+  const [inputPasswd, setInputPasswd] = useState('')
+  const [viewPass, setViewPass] = useState(false)
+  const loginRef = React.useRef(null)
+  const passRef = React.useRef(null)
+  const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
+  useEffect(()=> {
+    viewPass ? passRef.current.type = 'text' : passRef.current.type = 'password'
+  }, [viewPass])
+  const onLogin = (evt) => {
+    evt.preventDefault()
+    if(login({dispatch:dispatch, email: inputEmail, passwd: inputPasswd})){
+      navigate('/')
+    }
+    setInputPasswd('')
   }
+
   return (
     <>
-      <AppHeader />
-      <div className={styles.content}>
+      <form className={styles.content}>
         <p className="text text_type_main-medium">Вход</p>
         <Input
-
           type={'email'}
           placeholder={'E-mail'}
-          onChange={e => setEmail(e.target.value)}
-          value={email}
+          onChange={e => setInputEmail(e.target.value)}
+          value={inputEmail}
           name={'name'}
           error={false}
-          ref={emailRef}
+          ref={loginRef}
           errorText={'Ошибка'}
           size={'default'}
           extraClass="ml-1"
@@ -34,22 +45,20 @@ export default function Login() {
         <Input
           type={'password'}
           placeholder={'Пароль'}
-          onChange={e => setPasswd(e.target.value)}
+          onChange={e => setInputPasswd(e.target.value)}
           icon={'ShowIcon'}
-          value={passwd}
+          value={inputPasswd}
           name={'name'}
           error={false}
-          ref={passwdRef}
+          ref={passRef}
           onIconClick={onIconClick}
           errorText={'Ошибка'}
           size={'default'}
           extraClass="ml-1"
         />
-        <Link to='/' className={styles.link}>
-          <Button htmlType="button" type="primary" size="medium">
-            Войти
-          </Button>
-        </Link>
+        <Button  htmlType="submit" type="primary" size="medium" onClick={onLogin}>
+          Войти
+        </Button>
 
         <p className={`${styles.regText} text text_type_main-default mt-14`}>
           Вы — новый пользователь? <Link to='/register' className={styles.link}>Зарегистрироваться</Link>
@@ -57,7 +66,7 @@ export default function Login() {
         <p className={`${styles.recoveryText} text text_type_main-default`}>
           Забыли пароль? <Link to='/forgot-password' className={styles.link}>Восстановить пароль</Link>
         </p>
-      </div>
+      </form>
     </>
   )
 }

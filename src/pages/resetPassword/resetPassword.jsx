@@ -1,22 +1,32 @@
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import React from "react";
-import styles from '../login.module.css'
-import AppHeader from "../../../components/appHeader/appHeader"
+import React, {useEffect, useState} from "react";
+import styles from './resetPassword.module.css'
 import { Link } from 'react-router-dom';
+import {setNewPasswd} from '../../utils/api'
+import { Navigate, useNavigate } from 'react-router-dom'
 
-export default function NewPasswd() {
+export default function ResetPassword() {
+  const navigate = useNavigate()
   const [code, setCode] = React.useState('')
   const [passwd, setPasswd] = React.useState('')
   const codeRef = React.useRef(null)
   const passwdRef = React.useRef(null)
-  const onIconClick = () => {
-    setTimeout(() => passwdRef.current.focus(), 0)
-    alert('Icon Click Callback')
+  const [viewPass, setViewPass] = useState(false)
+  const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
+  useEffect(()=> {
+    viewPass ? passwdRef.current.type = 'text' : passwdRef.current.type = 'password'
+  }, [viewPass])
+
+  const redirect = () => {
+    navigate('/login')
+  }
+  const onSave = (evt) => {
+    evt.preventDefault()
+    setNewPasswd({passwd:passwd, code:code, redirect:redirect})
   }
   return (
     <>
-      <AppHeader />
-      <div className={styles.content}>
+      <form className={styles.content}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
           type={'password'}
@@ -35,7 +45,7 @@ export default function NewPasswd() {
         <Input
           type={'text'}
           placeholder={'Введите код из письма'}
-          onChange={e => setPasswd(e.target.value)}
+          onChange={e => setCode(e.target.value)}
           value={code}
           name={'code'}
           error={false}
@@ -45,16 +55,14 @@ export default function NewPasswd() {
           size={'default'}
           extraClass="ml-1"
         />
-        <Link to='/' className={styles.link}>
-          <Button htmlType="button" type="primary" size="medium">
-            Сохранить
-          </Button>
-        </Link>
+        <Button htmlType="submit" type="primary" size="medium" onClick={onSave}>
+          Сохранить
+        </Button>
 
         <p className={`${styles.regText} text text_type_main-default mt-14`}>
           Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
         </p>
-      </div>
+      </form>
     </>
   )
 }

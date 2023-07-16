@@ -1,28 +1,67 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { Index } from '../../pages/index'
 import { NotFound404 } from '../../pages/notFound404/notFound404'
 import Login from '../../pages/login/login'
 import Register from '../../pages/register/register'
-import EmailInput from '../../pages/forgotPassword/emailInput/emailInput'
+import ForgotPassword from '../../pages/forgotPassword/forgotPassword'
 import Profile from '../../pages/profile/profile'
+import IngredientDetails from '../ingredientDetails/ingredientDetails'
+import ResetPassword from '../../pages/resetPassword/resetPassword'
+import Feed from '../../pages/feed/feed'
+import OrderDescription from '../orderDescription/orderDescription'
+import Orders from '../../pages/orders/orders'
+import ProtectedRouteElement from '../protectedRouteElement/protectedRouteElement'
+import { useSelector, useDispatch } from 'react-redux';
+import { getIngredients, getUser } from "../../utils/api"
+import Modal from "../modal/modal";
+import LoadingScreen from '../loadingScreen/loadingScreen'
+import AppHeader from '../appHeader/appHeader'
+import OrderCreated from "../orderCreated/orderCreated";
 
 export default function App() {
+  const location = useLocation();
+  // const navigate = useNavigate();
+  const background = location.state && location.state.background;
+  // console.log(location )
+  const dispatch = useDispatch();
+  const state = useSelector(store => store.loader)
+  const modal = useSelector(store => store.modal)
+  useEffect(()=>{
+    dispatch(getUser()) // Проверка пользователя
+    dispatch(getIngredients()) // Загрузка данных из API
+  },[])
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/register" element={<Register />}/>
-        <Route path="/forgot-password" element={<EmailInput />}/>
-        <Route path="/profile" element={<Profile />}/>
-        <Route path="/ingredients/:id" element={<NotFound404 />}/>
-        {/*  URL для Step-2  */}
-        {/*<Route path="/feed" element={<NotFound404 />}/> */}
-        {/*<Route path="/orders" element={<NotFound404 />}/>*/}
-        {/* ----------------- */}
-        <Route path="/" element={<Index />}/>
-        <Route path="*" element={<NotFound404 />}/>
-      </Routes>
-    </Router>
+    <>
+      { state.isLoading ? <LoadingScreen /> :
+        state.hasError ? <p className={`text text_type_main-large`}>Ошибка загрузки данных...</p>
+          : <>
+            <AppHeader/>
+            <Routes>
+              <Route index element={<Index />} />
+              <Route path="login" element={<ProtectedRouteElement component={<Login/>} onlyUnAuth={true} />} />
+              <Route path="register" element={<ProtectedRouteElement component={<Register/>} onlyUnAuth={true} />} />
+              <Route path="forgot-password" element={<ProtectedRouteElement component={<ForgotPassword/>} onlyUnAuth={true} />} />
+              { background === "forgot-password"
+                && <Route path="reset-password" element={<ProtectedRouteElement component={<ResetPassword/>} onlyUnAuth={true} />}/>
+              }
+              <Route path="profile" element={<ProtectedRouteElement component={<Profile />} />} />
+              <Route path="profile/orders" element={<ProtectedRouteElement component={<Orders />} />} >
+                <Route path=":id" element={<OrderDescription />} />
+              </Route>
+              <Route path="profile/orders/created" element={<ProtectedRouteElement component={<Modal><OrderCreated /></Modal>} />} />
+              <Route path="feed" element={<Feed />} >
+                <Route path=":id" element={<OrderDescription />} />
+              </Route>
+              { background
+                ? <Route path="/ingredients/:id" element={<Modal><IngredientDetails /></Modal>}/>
+                : <Route path="/ingredients/:id" element={<IngredientDetails />}/>
+              }
+              <Route path="*" element={<NotFound404 />}/>
+            </Routes>
+          </>
+      }
+      { modal.visible && <Modal></Modal> }
+    </>
   )
 }
