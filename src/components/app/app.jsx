@@ -21,9 +21,7 @@ import OrderCreated from "../orderCreated/orderCreated";
 
 export default function App() {
   const location = useLocation();
-  // const navigate = useNavigate();
   const background = location.state && location.state.background;
-  // console.log(location )
   const dispatch = useDispatch();
   const state = useSelector(store => store.loader)
   const modal = useSelector(store => store.modal)
@@ -61,7 +59,6 @@ export default function App() {
             </Routes>
           </>
       }
-      { modal.visible && <Modal></Modal> }
     </>
   )
 }
