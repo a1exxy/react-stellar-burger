@@ -9,14 +9,14 @@ import { useSelector } from 'react-redux';
 
 export function Index() {
   return (
-        <div className={styles.app}>
-          <main className={styles.main}>
-            <DndProvider backend={HTML5Backend}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </DndProvider>
-          </main>
-        </div>
+    <div className={styles.app}>
+      <main className={styles.main}>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
+      </main>
+    </div>
   )
 }
 

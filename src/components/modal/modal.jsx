@@ -40,5 +40,5 @@ export default function Modal(props) {
 }
 
 Modal.propTypes = {
-  // modalRoot: PropTypes.object,
+  children: PropTypes.element.isRequired
 }
