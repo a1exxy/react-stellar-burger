@@ -18,7 +18,11 @@ export default function ForgotPassword() {
   }
   const onForgot = (evt) => {
     evt.preventDefault()
-    passwdReset({dispatch:dispatch, email:email, redirect: redirect})
+    if(!email) {
+      navigate('/forgot-password')
+    } else {
+      passwdReset({dispatch: dispatch, email: email, redirect: redirect})
+    }
   }
   return (
     <>
