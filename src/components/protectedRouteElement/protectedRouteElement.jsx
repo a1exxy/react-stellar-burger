@@ -13,12 +13,12 @@ export default function ProtectedRouteElement({ onlyUnAuth = false, component })
   const location = useLocation();
 
   if (!isAuthChecked) {
-    console.info(`[ProtectedRouteElement] Case: #1`)
+    // console.info(`[ProtectedRouteElement] Case: #1`)
     return <LoadingScreen />;
   }
 
   if (onlyUnAuth && user) {
-    console.info(`[ProtectedRouteElement] Case: #2`)
+    // console.info(`[ProtectedRouteElement] Case: #2`)
     // Пользователь авторизован, но роут предназначен для неавторизованного пользователя
     // Делаем редирект на главную страницу или на тот адрес, что записан в location.state.from
     const { from } = location.state || { from: { pathname: "/" } };
@@ -26,11 +26,11 @@ export default function ProtectedRouteElement({ onlyUnAuth = false, component })
   }
 
   if (!onlyUnAuth && !user) {
-    console.info(`[ProtectedRouteElement] Case: #3`)
+    // console.info(`[ProtectedRouteElement] Case: #3`)
     return <Navigate to="/login" state={{ from: location }} />;
   }
 
   // !onlyUnAuth && user Пользователь авторизован и роут для авторизованного пользователя
-  console.info(`[ProtectedRouteElement] Case: #4`)
+  // console.info(`[ProtectedRouteElement] Case: #4`)
   return component;
 };

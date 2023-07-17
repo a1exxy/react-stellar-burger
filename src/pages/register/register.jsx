@@ -32,48 +32,48 @@ export default function Register() {
   }
   return (
     <>
-      <form className={styles.content}>
+      <form className={styles.content} onSubmit={onRegister}>
         <p className="text text_type_main-medium">Регистрация</p>
         <Input
-          type={'text'}
-          placeholder={'Имя'}
+          type='text'
+          placeholder='Имя'
           onChange={e => setName(e.target.value)}
           value={name}
-          name={'name'}
+          name='name'
           error={false}
           ref={emailRef}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
         <Input
-          type={'email'}
-          placeholder={'E-mail'}
+          type='email'
+          placeholder='E-mail'
           onChange={e => setEmail(e.target.value)}
           value={email}
-          name={'email'}
+          name='email'
           error={false}
           ref={emailRef}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
         <Input
-          type={'password'}
-          placeholder={'Пароль'}
+          type='password'
+          placeholder='Пароль'
           onChange={e => setPasswd(e.target.value)}
-          icon={'ShowIcon'}
+          icon='ShowIcon'
           value={passwd}
-          name={'passwd'}
+          name='passwd'
           error={false}
           ref={passwdRef}
           onIconClick={onIconClick}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
         <Link to='/' className={styles.link}>
-          <Button htmlType="submit" type="primary" size="medium" onClick={onRegister}>
+          <Button htmlType="submit" type="primary" size="medium">
             Зарегистрироваться
           </Button>
         </Link>

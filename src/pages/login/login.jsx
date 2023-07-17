@@ -28,35 +28,35 @@ export default function Login() {
 
   return (
     <>
-      <form className={styles.content}>
+      <form className={styles.content} onSubmit={onLogin}>
         <p className="text text_type_main-medium">Вход</p>
         <Input
-          type={'email'}
-          placeholder={'E-mail'}
+          type='email'
+          placeholder='E-mail'
           onChange={e => setInputEmail(e.target.value)}
           value={inputEmail}
-          name={'name'}
+          name='name'
           error={false}
           ref={loginRef}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
         <Input
-          type={'password'}
-          placeholder={'Пароль'}
+          type='password'
+          placeholder='Пароль'
           onChange={e => setInputPasswd(e.target.value)}
-          icon={'ShowIcon'}
+          icon='ShowIcon'
           value={inputPasswd}
-          name={'name'}
+          name='name'
           error={false}
           ref={passRef}
           onIconClick={onIconClick}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
-        <Button  htmlType="submit" type="primary" size="medium" onClick={onLogin}>
+        <Button  htmlType="submit" type="primary" size="medium">
           Войти
         </Button>
 

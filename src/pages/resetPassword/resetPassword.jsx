@@ -26,36 +26,36 @@ export default function ResetPassword() {
   }
   return (
     <>
-      <form className={styles.content}>
+      <form className={styles.content} onSubmit={onSave}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
-          type={'password'}
-          placeholder={'Введите новый пароль'}
+          type='password'
+          placeholder='Введите новый пароль'
           onChange={e => setPasswd(e.target.value)}
-          icon={'ShowIcon'}
+          icon='ShowIcon'
           value={passwd}
-          name={'passwd'}
+          name='passwd'
           error={false}
           ref={passwdRef}
           onIconClick={onIconClick}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
         <Input
-          type={'text'}
-          placeholder={'Введите код из письма'}
+          type='text'
+          placeholder='Введите код из письма'
           onChange={e => setCode(e.target.value)}
           value={code}
-          name={'code'}
+          name='code'
           error={false}
           ref={codeRef}
           onIconClick={onIconClick}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
-        <Button htmlType="submit" type="primary" size="medium" onClick={onSave}>
+        <Button htmlType="submit" type="primary" size="medium">
           Сохранить
         </Button>
 

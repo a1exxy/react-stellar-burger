@@ -22,21 +22,21 @@ export default function ForgotPassword() {
   }
   return (
     <>
-      <form className={styles.content}>
+      <form className={styles.content} onSubmit={onForgot}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
-          type={'email'}
-          placeholder={'E-mail'}
+          type='email'
+          placeholder='E-mail'
           onChange={e => setEmail(e.target.value)}
           value={email}
-          name={'name'}
+          name='name'
           error={false}
           ref={emailRef}
-          errorText={'Ошибка'}
-          size={'default'}
+          errorText='Ошибка'
+          size='default'
           extraClass="ml-1"
         />
-        <Button htmlType="submit" type="primary" size="medium" onClick={onForgot}>
+        <Button htmlType="submit" type="primary" size="medium">
           Восстановить
         </Button>
 

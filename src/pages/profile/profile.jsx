@@ -54,56 +54,56 @@ export default function Profile() {
           <p className={`text text_type_main-default text_color_inactive ${styles.description}`}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>
 
-        <form className={styles.inputs}>
+        <form className={styles.inputs} onSubmit={onSave}>
           <Input
-            type={'text'}
-            placeholder={'Имя'}
+            type='text'
+            placeholder='Имя'
             onChange={e => setName(e.target.value)}
-            icon={'EditIcon'}
+            icon='EditIcon'
             value={name}
-            name={'name'}
+            name='name'
             error={false}
             ref={nameRef}
             onIconClick={() => onEditIconClick(nameRef)}
-            errorText={'Ошибка'}
-            size={'default'}
+            errorText='Ошибка'
+            size='default'
             extraClass="ml-1"
             disabled={edit.name}
           />
           <Input
-            type={'email'}
-            placeholder={'Логин'}
+            type='email'
+            placeholder='Логин'
             onChange={e => setEmail(e.target.value)}
-            icon={'EditIcon'}
+            icon='EditIcon'
             value={login}
-            name={'email'}
+            name='email'
             error={false}
             ref={emailRef}
             onIconClick={() => onEditIconClick(emailRef)}
-            errorText={'Ошибка'}
-            size={'default'}
+            errorText='Ошибка'
+            size='default'
             extraClass="ml-1"
             disabled={edit.email}
           />
           <Input
-            type={'password'}
-            placeholder={'Пароль'}
+            type='password'
+            placeholder='Пароль'
             onChange={e => setPasswd(e.target.value)}
-            icon={'EditIcon'}
+            icon='EditIcon'
             value={passwd}
-            name={'passwd'}
+            name='passwd'
             error={false}
             ref={passwdRef}
             onIconClick={() => onEditIconClick(passwdRef)}
-            errorText={'Ошибка'}
-            size={'default'}
+            errorText='Ошибка'
+            size='default'
             extraClass="ml-1"
             disabled={edit.passwd}
           />
           { (!edit.name || !edit.email || !edit.passwd ) &&
             <div className={styles.buttons}>
               <Button htmlType="button" type="secondary" size="medium" onClick={onCancel}>Отмена</Button>
-              <Button htmlType="submit" type="primary" size="medium" onClick={onSave}>Сохранить</Button>
+              <Button htmlType="submit" type="primary" size="medium">Сохранить</Button>
             </div>
           }
         </form>

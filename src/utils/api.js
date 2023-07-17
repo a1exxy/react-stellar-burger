@@ -88,7 +88,7 @@ export const refreshToken = () => {
     .catch(e => console.error(`Не удалось обновить accessToken (${e})`))
 };
 
-export const request = async ({method='GET', path, body=null, auth=false, debug=true}) => {
+export const request = async ({method='GET', path, body=null, auth=false, debug=false}) => {
   // Универсальная функция запроса к API
   const url = `${apiURL}${path}`
   const accessToken = localStorage.getItem('accessToken')
@@ -112,7 +112,7 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
     const res = await fetch(url,  options);
     return await checkReponse(res);
   } catch (err) {
-    console.log(err)
+    // console.log(err)
     if (err.message === "jwt expired" || !err.success ) {
       if(debug){console.info('Run refreshToken')}
       const refreshData = await refreshToken(); //обновляем токен
@@ -130,7 +130,7 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
 }
 
 export const login = ({dispatch, email, passwd}) => {
-  console.log('Run apiAuth.login')
+  // console.log('Run apiAuth.login')
   request({
       path:'/auth/login',
       method: 'POST',
@@ -148,13 +148,12 @@ export const login = ({dispatch, email, passwd}) => {
     })
     .catch(e => {
       console.error(e)
-      alert(e.message)
       return false
     })
 }
 
 export const logout = (dispatch) => {
-  console.info(`Run apiAuth.logout`)
+  // console.info(`Run apiAuth.logout`)
   const refreshToken = localStorage.getItem('refreshToken')
   request({
       path:'/auth/logout',
@@ -162,7 +161,7 @@ export const logout = (dispatch) => {
       body: {"token": refreshToken}
     })
     .then(res => {
-      console.log(res)
+      // console.log(res)
       if(res.success) {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
@@ -175,13 +174,12 @@ export const logout = (dispatch) => {
     })
     .catch(e => {
       console.error(e)
-      alert(e.message)
       return false
     })
 }
 
 export const register = ({dispatch, name, email, passwd}) => {
-  console.info(`Run apiAuth.register`)
+  // console.info(`Run apiAuth.register`)
   request({
       path:'/auth/register',
       method: 'POST',
@@ -199,21 +197,20 @@ export const register = ({dispatch, name, email, passwd}) => {
     })
     .catch(e => {
       console.error(e)
-      alert(e.message)
       return false
     })
 }
 
 export function getUser () {
   return function (dispatch) {
-    console.info(`Run apiAuth.getUser`)
+    // console.info(`Run apiAuth.getUser`)
     if (localStorage.getItem("accessToken")) {
       request({
           path: '/auth/user',
           auth: true
         })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           dispatch({type:LOGGED_IN, user: res.user.name, email:res.user.email})
         })
         .catch(e => console.error(e))
@@ -226,7 +223,7 @@ export function getUser () {
 }
 
 export const updateUser = ({dispatch, name, email, passwd}) => {
-  console.info(`Run apiAuth.updateUser`)
+  // console.info(`Run apiAuth.updateUser`)
   request({
     path: '/auth/user',
     method: 'PATCH',
@@ -246,7 +243,7 @@ export const updateUser = ({dispatch, name, email, passwd}) => {
 }
 
 export const passwdReset = ({dispatch, email, redirect}) => {
-  console.info(`Run apiAuth.passwdReset`)
+  // console.info(`Run apiAuth.passwdReset`)
   request({
     path: '/password-reset',
     method: 'POST',
@@ -254,7 +251,7 @@ export const passwdReset = ({dispatch, email, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      console.log(res)
+      // console.log(res)
       redirect()
     } else {
       console.error(`Не удолось обновить пользователя`)
@@ -264,7 +261,7 @@ export const passwdReset = ({dispatch, email, redirect}) => {
 }
 
 export const setNewPasswd = ({passwd, code, redirect}) => {
-  console.info(`Run apiAuth.setNewPasswd`)
+  // console.info(`Run apiAuth.setNewPasswd`)
   request({
     path: '/password-reset/reset',
     method: 'POST',
@@ -272,7 +269,7 @@ export const setNewPasswd = ({passwd, code, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      console.log(res)
+      // console.log(res)
       redirect()
     } else {
       console.error(`Не удолось установить пароль`)
