@@ -1,9 +1,10 @@
-// Детали заказа
+// Номер созданого заказа
+
 import { useSelector } from 'react-redux';
-import styles from "./orderDetails.module.css"
+import styles from "./orderCreated.module.css"
 import checkImg from "../../images/check.svg"
 
-export default function OrderDetails() {
+export default function OrderCreated() {
   const order = useSelector(store => store.order )
   return (
     <div className={`mt-30 mb-30 ${styles.orderDetails}`}>
