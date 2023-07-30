@@ -2,28 +2,28 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import React from "react";
 import styles from './forgotPassword.module.css'
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import {USER_SET_RECOVERY_EMAIL} from '../../services/actions/user'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {passwdReset} from '../../utils/api'
 
 export default function ForgotPassword() {
-  const dispatch = useDispatch();
   const navigate = useNavigate()
   const [email, setEmail] = React.useState('')
   const emailRef = React.useRef(null)
+
   const redirect = () => {
     console.log(`redirect to /reset-password`)
     navigate('/reset-password', {state: {background: "forgot-password"}})
   }
+
   const onForgot = (evt) => {
     evt.preventDefault()
     if(!email) {
       navigate('/forgot-password')
     } else {
-      passwdReset({dispatch: dispatch, email: email, redirect: redirect})
+      passwdReset({email: email, redirect: redirect})
     }
   }
+
   return (
     <>
       <form className={styles.content} onSubmit={onForgot}>
@@ -43,7 +43,6 @@ export default function ForgotPassword() {
         <Button htmlType="submit" type="primary" size="medium">
           Восстановить
         </Button>
-
         <p className={`${styles.regText} text text_type_main-default mt-14`}>
           Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
         </p>

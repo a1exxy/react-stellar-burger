@@ -1,16 +1,13 @@
 // конструктор бургера
-import React, {useMemo} from "react";
-import {Button, CurrencyIcon, ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import React, { useMemo } from "react";
+import { Button, CurrencyIcon, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burgerConstructor.module.css'
-import { useDrag, useDrop } from "react-dnd";
+import { useDrop } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
-import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM} from '../../services/actions/burger'
-import {createOrder} from "../../utils/api"
-import {MODAL_OPEN} from '../../services/actions/modal'
-import OrderCreated from "../orderCreated/orderCreated";
+import { BURGER_ADD_ELEM } from '../../services/actions/burger'
+import { createOrder } from "../../utils/api"
 import BurgerConstructorItem from './burgerConstructorItem/bugerConstructorItem'
-import {SET_ORDER} from '../../services/actions/order'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function BurgerConstructor() {
   const burgerContent = useSelector(store => store.burger)
@@ -28,13 +25,11 @@ export default function BurgerConstructor() {
           isHover: monitor.isOver(),
       })
   });
-  const createOrderSuccess = ({orderNum, content}) => {
-    dispatch({type: SET_ORDER, number: orderNum, content: content})
-  }
+
   const onOrder = () => {
     let ids = burgerContent.ingredients.map(e => e._id)
-    if(burgerContent.bun) { ids = [...ids, burgerContent.bun._id] }
-    dispatch(createOrder({ companents: ids, onSuccess: createOrderSuccess }))
+    if(burgerContent.bun) { ids = [...ids, burgerContent.bun._id, burgerContent.bun._id] }
+    dispatch(createOrder({ companents: ids }))
     navigate('profile/orders/created')
   }
 

@@ -1,11 +1,9 @@
 // Детали ингредиента
 
-// import PropTypes from "prop-types";
 import styles from "./ingredientDetails.module.css";
-import {apiItemType} from '../../utils/prop-types'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
-import {useMemo, useEffect, useState} from "react";
+import { useMemo } from "react";
 
 export default function IngredientDetails() {
   const ingredients = useSelector(store => store.loader.feed )

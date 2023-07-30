@@ -5,7 +5,6 @@ import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./modal.module.css"
 import React from "react";
 import ModalOverlay from "../modalOverlay/modalOverlay";
-import { MODAL_CLOSE } from '../../services/actions/modal'
 import { useNavigate } from 'react-router-dom'
 
 const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна

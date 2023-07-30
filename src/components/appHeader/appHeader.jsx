@@ -1,7 +1,6 @@
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./appHeader.module.css";
 import HeaderButton from '../headerButton/headerButton'
-import { Link } from 'react-router-dom';
 import React from "react";
 import {CONSTRUCTOR, FEED, PROFILE} from '../../services/actions/page'
 

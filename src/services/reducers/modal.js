@@ -1,9 +1,6 @@
-
 import {MODAL_OPEN, MODAL_CLOSE} from '../actions/modal'
 
-
 const initialState = {visible:false, body: null}
-
 
 export const modal = (state = initialState, action) => {
   switch (action.type) {

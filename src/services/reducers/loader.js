@@ -1,4 +1,3 @@
-
 import {SET_START_STATE, SET_OK_STATE, SET_FAIL_STATE} from '../actions/loader'
 
 const initialState = { feed:[], isLoading: false, hasError: false }

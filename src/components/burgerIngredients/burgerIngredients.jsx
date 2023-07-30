@@ -4,6 +4,7 @@ import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {useMemo, useRef} from "react";
 import IngredientPlate from '../ingredientPlate/ingredientPlate'
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BurgerIngredients() {
   const ingredients = useSelector(store => store.loader.feed )
@@ -25,7 +26,7 @@ export default function BurgerIngredients() {
     setCurrentTab(value)
     ingredientsBlocks[value].current.scrollIntoView({behavior: "smooth", block: "start"})
   }
-  const onScroll = (evt) => {
+  const onScroll = () => {
     const scroll = listRef.current.scrollTop
     const tops = {
       buns: ingredientsBlocks.buns.current.getBoundingClientRect().top - listRef.current.getBoundingClientRect().top,
@@ -45,6 +46,7 @@ export default function BurgerIngredients() {
       setTab('mains')
     }
   }
+
   return (
     <section  className={styles.burgerIngredients}>
       <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
@@ -66,7 +68,7 @@ export default function BurgerIngredients() {
         </ul>
         <h2 ref={ingredientsBlocks.sauces} className={`text text_type_main-medium sauces`}>Соусы</h2>
         <ul className={styles.ingrediensTypeList}>
-          {sauces.map((item, index) => <li key={index}><IngredientPlate settings={item} /></li>) }
+          {sauces.map((item) => <li key={uuidv4()}><IngredientPlate settings={item} /></li>) }
         </ul>
         <h2 ref={ingredientsBlocks.mains} className={`text text_type_main-medium mains`}>Начинки</h2>
         <ul className={styles.ingrediensTypeList}>

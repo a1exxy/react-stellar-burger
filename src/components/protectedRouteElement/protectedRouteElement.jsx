@@ -1,7 +1,7 @@
 // Защищенные пути
 
 import { Navigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LoadingScreen from '../loadingScreen/loadingScreen'
 
 export default function ProtectedRouteElement({ onlyUnAuth = false, component }) {

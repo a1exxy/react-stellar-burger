@@ -1,6 +1,5 @@
 import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM, BURGER_MOVE_ELEM} from '../actions/burger'
 import { v4 as uuidv4 } from 'uuid';
-import calcCounters from '../../utils/calcCounters'
 
 const initialState = {
   bun: null,

@@ -12,10 +12,6 @@
   align-items: center;
 }
 
-.dragIcon {
-  cursor: move;
-}
-
 .burgerContentList {
   display: flex;
   flex-direction: column;

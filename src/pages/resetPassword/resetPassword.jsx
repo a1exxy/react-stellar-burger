@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import styles from './resetPassword.module.css'
 import { Link } from 'react-router-dom';
 import {setNewPasswd} from '../../utils/api'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
@@ -12,6 +12,7 @@ export default function ResetPassword() {
   const codeRef = React.useRef(null)
   const passwdRef = React.useRef(null)
   const [viewPass, setViewPass] = useState(false)
+
   const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
   useEffect(()=> {
     viewPass ? passwdRef.current.type = 'text' : passwdRef.current.type = 'password'
@@ -20,10 +21,12 @@ export default function ResetPassword() {
   const redirect = () => {
     navigate('/login')
   }
+
   const onSave = (evt) => {
     evt.preventDefault()
     setNewPasswd({passwd:passwd, code:code, redirect:redirect})
   }
+
   return (
     <>
       <form className={styles.content} onSubmit={onSave}>
@@ -58,7 +61,6 @@ export default function ResetPassword() {
         <Button htmlType="submit" type="primary" size="medium">
           Сохранить
         </Button>
-
         <p className={`${styles.regText} text text_type_main-default mt-14`}>
           Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
         </p>

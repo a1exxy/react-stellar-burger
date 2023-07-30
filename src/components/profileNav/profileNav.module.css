@@ -1,0 +1,31 @@
+.cell {
+  height: 64px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(0,0,0,0);
+  border: 0;
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+  color: #8585AD;
+}
+
+.active {
+  color: #F2F2F3;
+}
+
+.links {
+  margin-right: 60px;
+  width: 320px;
+}
+
+.description {
+  height: 48px;
+  width: 320px;
+  margin-top: 80px;
+  color: rgba(133, 133, 173, .4);;
+}

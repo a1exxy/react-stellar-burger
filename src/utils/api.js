@@ -1,70 +1,24 @@
 // Взаимодействие с API
 import {SET_START_STATE, SET_OK_STATE, SET_FAIL_STATE} from '../services/actions/loader'
-import React from "react";
 import {SET_ORDER, CLEAR_ORDER} from '../services/actions/order'
 import {LOGGED_IN, LOGGED_OUT, USER_UPDATED, USER_CHECKED} from '../services/actions/user'
+import {
+  connect as connectUser,
+  disconnect as disconnectUser,
+} from "../services/userOrders/actions";
 
 const apiURL = process.env.REACT_APP_API
 const baseOptions = {method:'GET', headers: {"Content-Type": "application/json;charset=utf-8"}, redirect: 'follow'}
+const WS_USER_ORDERS_URL = process.env.REACT_APP_WS_USER_ORDERS_URL
 
-const ingredientsURL = apiURL + '/ingredients'
-const ordersURL = apiURL + '/orders'
-
-const options = {method:'GET', redirect:'follow'}
-export function getIngredients () {
-  return function (dispatch) {
-    dispatch({ type: SET_START_STATE })
-    fetch(ingredientsURL, options)
-      .then( res  => {
-          if (res.ok){
-            return Promise.resolve(res.json())
-          } else {
-            return Promise.reject(`Ошибка сетевого взаимодействия: ${res.status}`)
-          }
-        }
-      )
-      .then( res => {
-        dispatch({
-          type: SET_OK_STATE,
-          feed: res.data
-        })
-      })
-      .catch( err => {
-        dispatch({ type: SET_FAIL_STATE })
-        console.error(`Ошибка сетевого взаимодействия: ${err}`)
-      })
-  }
+const getAccessToken = () => {
+  return localStorage.getItem("accessToken")
 }
 
-export function createOrder ({companents, onSuccess}) {
-  return function (dispatch) {
-    dispatch({type: CLEAR_ORDER})
-    fetch(ordersURL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({"ingredients": companents})
-    })
-    .then(response => {
-      if (response.ok) {
-        return Promise.resolve(response.json())
-      } else {
-        return Promise.reject(`Ошибка сетевого взаимодействия: ${response.status}`)
-      }
-    })
-    .then(response => {
-      if(response.success === true) {
-        onSuccess({orderNum: response.order.number, content: companents})
-      } else {
-          Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
-      }
-    })
-    .catch(err => {
-      console.error(`Ошибка сетевого взаимодействия: ${err.message}`);
-    })
-  }
+const connectUserOrders = (dispatch) => {
+  dispatch(connectUser(`${WS_USER_ORDERS_URL}?token=${getAccessToken().replace('Bearer ', '')}`));
 }
 
-// -----------------------------------------------------------------------------------------
 
 const setTokensToLocalStorage = (accessToken, refreshToken) => {
   localStorage.setItem("accessToken", accessToken);
@@ -82,13 +36,13 @@ export const refreshToken = () => {
         method: "POST",
         body: JSON.stringify({
         token: localStorage.getItem("refreshToken"),
-      }),
+      })
     })
     .then(checkReponse)
     .catch(e => console.error(`Не удалось обновить accessToken (${e})`))
 };
 
-export const request = async ({method='GET', path, body=null, auth=false, debug=false}) => {
+const request = async ({method='GET', path, body=null, auth=false, debug=false}) => {
   // Универсальная функция запроса к API
   const url = `${apiURL}${path}`
   const accessToken = localStorage.getItem('accessToken')
@@ -104,6 +58,14 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
   if(debug) {
     console.log(`-------------------------------`)
     console.log(`[Debug request] url: ${url}`)
+    console.log(`[Debug request] >`)
+    console.log(`[Debug request] params: `)
+    console.log(`[Debug request] method=${method}`)
+    console.log(`[Debug request] path=${path}`)
+    console.log(`[Debug request] body=${body}`)
+    console.log(`[Debug request] auth=${auth}`)
+    console.log(`[Debug request] debug=${debug}`)
+    console.log(`[Debug request] >`)
     console.log(`[Debug request] options:`)
     console.log(options)
     console.log(`-------------------------------`)
@@ -112,11 +74,10 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
     const res = await fetch(url,  options);
     return await checkReponse(res);
   } catch (err) {
-    // console.log(err)
-    if (err.message === "jwt expired" || !err.success ) {
+    if (err && (err.message === "jwt expired" || !err.success )) {
       if(debug){console.info('Run refreshToken')}
       const refreshData = await refreshToken(); //обновляем токен
-      if (!refreshData.success) {
+      if (refreshData && !refreshData.success) {
         return Promise.reject(refreshData);
       }
       setTokensToLocalStorage(refreshData.accessToken, refreshData.refreshToken)
@@ -129,8 +90,68 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
   }
 }
 
+export function getIngredients () {
+  return function (dispatch) {
+    dispatch({ type: SET_START_STATE })
+      request({path: '/ingredients'})
+      .then( res => {
+        dispatch({
+          type: SET_OK_STATE,
+          feed: res.data
+        })
+      })
+      .catch( err => {
+        dispatch({ type: SET_FAIL_STATE })
+        console.error(`Ошибка сетевого взаимодействия: ${err}`)
+      })
+  }
+}
+
+export function createOrder ({companents}) {
+  return function (dispatch) {
+    dispatch({type: CLEAR_ORDER})
+    request({
+      method: "POST",
+      path: '/orders',
+      body: {"ingredients": companents},
+      auth: true,
+      debug: true
+    })
+    .then(response => {
+      console.log(response)
+      if(response.success === true) {
+        dispatch({type: SET_ORDER, number: response.order.number, content: companents, name: response.name})
+      } else {
+          Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
+      }
+    })
+    .catch(err => {
+      console.error(`Ошибка сетевого взаимодействия: ${err.message}`);
+      console.log(err)
+    })
+  }
+}
+
+export const getOrder = ({dispatch, orderId}) => {
+  request({path: `/orders/${orderId}`, debug: false})
+    .then(res => {
+      if(res && res.success) {
+        // console.log(res.orders[0])
+        dispatch({type:SET_ORDER,
+          number: res.orders[0].number,
+          content:res.orders[0].ingredients,
+          name: res.orders[0].name,
+          status: res.orders[0].status,
+          createdAt: res.orders[0].createdAt
+        })
+      }
+    })
+    .catch(e => {
+      console.error(`Ошибка получения заказа (${e})`)
+    })
+}
+
 export const login = ({dispatch, email, passwd}) => {
-  // console.log('Run apiAuth.login')
   request({
       path:'/auth/login',
       method: 'POST',
@@ -140,6 +161,7 @@ export const login = ({dispatch, email, passwd}) => {
       if(res.success) {
         setTokensToLocalStorage(res.accessToken, res.refreshToken)
         dispatch({type:LOGGED_IN, user: res.user.name, email:res.user.email})
+        connectUserOrders(dispatch)
         return true
       } else {
         console.error(`Не удалось пройти аутантификацию`)
@@ -153,7 +175,6 @@ export const login = ({dispatch, email, passwd}) => {
 }
 
 export const logout = (dispatch) => {
-  // console.info(`Run apiAuth.logout`)
   const refreshToken = localStorage.getItem('refreshToken')
   request({
       path:'/auth/logout',
@@ -161,11 +182,11 @@ export const logout = (dispatch) => {
       body: {"token": refreshToken}
     })
     .then(res => {
-      // console.log(res)
       if(res.success) {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         dispatch({type:LOGGED_OUT})
+        dispatch(disconnectUser())
         return true
       } else {
         console.error(`Не удалось разлогинится`)
@@ -179,7 +200,6 @@ export const logout = (dispatch) => {
 }
 
 export const register = ({dispatch, name, email, passwd}) => {
-  // console.info(`Run apiAuth.register`)
   request({
       path:'/auth/register',
       method: 'POST',
@@ -189,6 +209,7 @@ export const register = ({dispatch, name, email, passwd}) => {
       if(res.success) {
         setTokensToLocalStorage(res.accessToken, res.refreshToken)
         dispatch({type:LOGGED_IN, user: name, email:email})
+        connectUserOrders(dispatch)
         return true
       } else {
         console.error(`Не удалось пройти регистрацию`)
@@ -201,17 +222,22 @@ export const register = ({dispatch, name, email, passwd}) => {
     })
 }
 
+
+
 export function getUser () {
   return function (dispatch) {
-    // console.info(`Run apiAuth.getUser`)
-    if (localStorage.getItem("accessToken")) {
+    const accessToken = getAccessToken()
+    if (accessToken) {
       request({
           path: '/auth/user',
           auth: true
         })
         .then(res => {
           // console.log(res)
-          dispatch({type:LOGGED_IN, user: res.user.name, email:res.user.email})
+          if(res && res.success) {
+            dispatch({type: LOGGED_IN, user: res.user.name, email: res.user.email})
+            connectUserOrders(dispatch)
+          }
         })
         .catch(e => console.error(e))
         .finally(dispatch({type:USER_CHECKED}))
@@ -223,7 +249,6 @@ export function getUser () {
 }
 
 export const updateUser = ({dispatch, name, email, passwd}) => {
-  // console.info(`Run apiAuth.updateUser`)
   request({
     path: '/auth/user',
     method: 'PATCH',
@@ -242,8 +267,7 @@ export const updateUser = ({dispatch, name, email, passwd}) => {
   .catch(e => console.error(e))
 }
 
-export const passwdReset = ({dispatch, email, redirect}) => {
-  // console.info(`Run apiAuth.passwdReset`)
+export const passwdReset = ({email, redirect}) => {
   request({
     path: '/password-reset',
     method: 'POST',
@@ -251,7 +275,6 @@ export const passwdReset = ({dispatch, email, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      // console.log(res)
       redirect()
     } else {
       console.error(`Не удолось обновить пользователя`)
@@ -261,7 +284,6 @@ export const passwdReset = ({dispatch, email, redirect}) => {
 }
 
 export const setNewPasswd = ({passwd, code, redirect}) => {
-  // console.info(`Run apiAuth.setNewPasswd`)
   request({
     path: '/password-reset/reset',
     method: 'POST',
@@ -269,7 +291,6 @@ export const setNewPasswd = ({passwd, code, redirect}) => {
   })
   .then(res => {
     if (res.success) {
-      // console.log(res)
       redirect()
     } else {
       console.error(`Не удолось установить пароль`)

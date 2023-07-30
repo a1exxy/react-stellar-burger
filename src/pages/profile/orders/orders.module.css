@@ -1,0 +1,16 @@
+.page {
+  width: 100%;
+}
+
+.content {
+  width: 1240px;
+  display: flex;
+  justify-items: stretch;
+  margin-top: 120px;
+  gap: 24px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}

@@ -4,13 +4,14 @@
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-
 }
+
 .leftLink {
   display: flex;
   justify-content: flex-start;
   gap: 8px;
 }
+
 .link {
   text-decoration: none;
 }
@@ -18,6 +19,7 @@
 .logo {
   margin: auto;
 }
+
 .appHeaderContent {
   width: 1280px;
   display: grid;
@@ -29,4 +31,3 @@
   display: flex;
   justify-content: flex-end;
 }
-

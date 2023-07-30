@@ -1,59 +1,47 @@
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./profile.module.css"
 import React from "react";
-import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {updateUser, logout} from '../../utils/api'
+import { updateUser } from '../../utils/api'
+import ProfileNav from '../../components/profileNav/profileNav'
 
 const viewPasswd = '*****'
 
 export default function Profile() {
   const {user, email} = useSelector(store => store.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-
   const [name, setName] = React.useState(user)
   const [login, setEmail] = React.useState(email)
-
   const [passwd, setPasswd] = React.useState(viewPasswd)
   const [edit, setEdit] = React.useState({name:true, email:true, passwd:true})
-
-
   const nameRef = React.useRef(null)
   const emailRef = React.useRef(null)
   const passwdRef = React.useRef(null)
+
   const onEditIconClick = (ref) => {
     console.log(ref)
     setEdit({...edit, [ref.current.name]:false})
     setTimeout(() => ref.current.focus(), 0)
   }
+
   const onCancel = () => {
     setPasswd(viewPasswd)
     setName(user)
     setEmail(email)
     setEdit({name:true, email:true, passwd:true})
   }
+
   const onSave = (evt) => {
     evt.preventDefault()
     console.log(`Save update profile`)
     updateUser({dispatch: dispatch, name: name, email:login, passwd:passwd})
     setEdit({name:true, email:true, passwd:true})
-    // console.log(user)
   }
-  const onLogout = (evt) => {
-    logout(dispatch)
-    navigate('/')
-  }
-  return (
-    <>
-      <div className={styles.content}>
-        <div className={styles.links}>
-          <p className={`text text_type_main-medium ${styles.cell}`}>Профиль</p>
-          <Link to='/profile/orders' className={styles.link}><p className={`text text_type_main-medium ${styles.cell}`}>История заказов</p></Link>
-          <button className={`text text_type_main-medium ${styles.cell} ${styles.link}`} onClick={onLogout}> Выход </button>
-          <p className={`text text_type_main-default text_color_inactive ${styles.description}`}>В этом разделе вы можете изменить свои персональные данные</p>
-        </div>
 
+  return (
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <ProfileNav />
         <form className={styles.inputs} onSubmit={onSave}>
           <Input
             type='text'
@@ -108,7 +96,6 @@ export default function Profile() {
           }
         </form>
       </div>
-    </>
-
+    </div>
   )
 }

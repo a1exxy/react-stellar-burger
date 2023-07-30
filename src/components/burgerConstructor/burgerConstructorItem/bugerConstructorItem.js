@@ -1,10 +1,10 @@
-import React, {useRef, useCallback}  from "react";
+import React, { useRef }  from "react";
 import { useDrag, useDrop } from "react-dnd";
 import styles from './burgerConstructorItem.module.css'
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from 'react-redux';
-import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM, BURGER_MOVE_ELEM} from '../../../services/actions/burger'
-import {burgerConstructorItemElementPropType} from '../../../utils/prop-types'
+import { BURGER_REMOVE_ELEM, BURGER_MOVE_ELEM } from '../../../services/actions/burger'
+import { burgerConstructorItemElementPropType } from '../../../utils/prop-types'
 import PropTypes from "prop-types";
 export default function BurgerConstructorItem ({element, elementIndex}) {
     const ref = useRef(null)
@@ -22,7 +22,6 @@ export default function BurgerConstructorItem ({element, elementIndex}) {
           isDragging: monitor.isDragging(),
         }),
         end: (item, monitor) => {
-          const { id: droppedId, originalIndex } = item
           const didDrop = monitor.didDrop()
           if (!didDrop) {
             const dragIndex = findIndex(item.uuid)

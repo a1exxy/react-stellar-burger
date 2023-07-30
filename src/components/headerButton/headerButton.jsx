@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import styles from './headerButton.module.css'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function HeaderButton(props) {

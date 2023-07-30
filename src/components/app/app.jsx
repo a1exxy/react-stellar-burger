@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate, Navigate } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { Index } from '../../pages/index'
 import { NotFound404 } from '../../pages/notFound404/notFound404'
 import Login from '../../pages/login/login'
@@ -10,7 +10,7 @@ import IngredientDetails from '../ingredientDetails/ingredientDetails'
 import ResetPassword from '../../pages/resetPassword/resetPassword'
 import Feed from '../../pages/feed/feed'
 import OrderDescription from '../orderDescription/orderDescription'
-import Orders from '../../pages/orders/orders'
+import Orders from '../../pages/profile/orders/orders'
 import ProtectedRouteElement from '../protectedRouteElement/protectedRouteElement'
 import { useSelector, useDispatch } from 'react-redux';
 import { getIngredients, getUser } from "../../utils/api"
@@ -18,17 +18,32 @@ import Modal from "../modal/modal";
 import LoadingScreen from '../loadingScreen/loadingScreen'
 import AppHeader from '../appHeader/appHeader'
 import OrderCreated from "../orderCreated/orderCreated";
+import {
+  connect as connectFeet,
+  disconnect as disconnectFeet,
+} from "../../services/feed/actions";
+
+const WS_ALL_ORDERS_URL = process.env.REACT_APP_WS_ALL_ORDERS_URL
 
 export default function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
   const dispatch = useDispatch();
   const state = useSelector(store => store.loader)
-  const modal = useSelector(store => store.modal)
+
+  const connect = () => dispatch(connectFeet(WS_ALL_ORDERS_URL));
+
+  const disconnect = () => dispatch(disconnectFeet());
+
   useEffect(()=>{
     dispatch(getUser()) // Проверка пользователя
     dispatch(getIngredients()) // Загрузка данных из API
+    connect() // Подклчение обновления всех заказов
+    return () => {
+      disconnect()
+    }
   },[])
+
   return (
     <>
       { state.isLoading ? <LoadingScreen /> :
