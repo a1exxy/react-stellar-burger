@@ -1,6 +1,5 @@
 import {useEffect} from "react";
 import ReactDOM from 'react-dom'
-// import PropTypes from "prop-types";
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./modal.module.css"
 import React from "react";
@@ -12,18 +11,12 @@ import {useLocation, useNavigate} from "react-router-dom";
 const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
 
 export default function Modal() {
-  // const body = props.children
-  // const {onClose} = props
-  // console.log(onClose)
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const modal = useSelector(store => store.modal )
-  // console.log(modal)
   function onClose () {
     dispatch({type: MODAL_CLOSE})
-    // console.log(`[Modal] location.state.background`)
-    // console.log(location.state.background)
     if (location.state.background) {
       navigate(location.state.background)
     }
@@ -49,8 +42,3 @@ export default function Modal() {
     </div>
   , modalRoot)
 }
-
-// Modal.propTypes = {
-//   children: PropTypes.element.isRequired,
-//   onClose: PropTypes.func.isRequired
-// }

@@ -4,7 +4,6 @@ import styles from './reset-password.module.css'
 import { Link } from 'react-router-dom';
 import {setNewPasswd} from '../../utils/api-wrappers'
 import { useNavigate } from 'react-router-dom'
-import {useDispatch} from "react-redux";
 
 export default function ResetPassword() {
   const navigate = useNavigate()

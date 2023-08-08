@@ -14,7 +14,6 @@ export default function OrderDescription(props) {
   const orderId = id ? id : props.id
   const order = useSelector(store => store.order )
   useEffect(()=>{
-    // getOrder({dispatch:dispatch, orderId: orderId})
     dispatch(getOrder({orderId: orderId}))
   },[orderId])
 

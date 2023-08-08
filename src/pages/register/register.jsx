@@ -2,13 +2,9 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import React, {useEffect, useState} from "react";
 import styles from './register.module.css'
 import { Link } from 'react-router-dom';
-import {createOrder, register} from '../../utils/api-wrappers'
+import { register} from '../../utils/api-wrappers'
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import {getAccessToken} from '../../utils/utils'
-import {MODAL_OPEN} from "../../services/actions/modal";
-import OrderCreated from "../../components/order-created/order-created";
-import {LOGGED_IN} from "../../services/actions/user";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,7 +16,6 @@ export default function Register() {
   const emailRef = React.useRef(null)
   const passwdRef = React.useRef(null)
   const [viewPass, setViewPass] = useState(false)
-  const {user} = useSelector(store => store.user)
   const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
 
   useEffect(()=> {

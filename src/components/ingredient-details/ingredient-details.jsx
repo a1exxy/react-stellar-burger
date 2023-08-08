@@ -1,15 +1,11 @@
 // Детали ингредиента
 
 import styles from "./ingredient-details.module.css";
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { useMemo } from "react";
 
 export default function IngredientDetails(props) {
-
-  const location = useLocation();
-  // const background = location.state && location.state.background;
-  // const background = location.state && location.state.background;
   const ingredients = useSelector(store => store.loader.feed )
   const {id} = useParams()
   const ingredientId = id ? id : props.ingredientId
