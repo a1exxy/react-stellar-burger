@@ -2,12 +2,13 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import styles from "./profile.module.css"
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUser } from '../../utils/api'
-import ProfileNav from '../../components/profileNav/profileNav'
+import { updateUser } from '../../utils/api-wrappers'
+import ProfileNav from '../../components/profile-nav/profile-nav'
 
 const viewPasswd = '*****'
 
 export default function Profile() {
+  console.log(`RUN Profile`)
   const {user, email} = useSelector(store => store.user);
   const dispatch = useDispatch();
   const [name, setName] = React.useState(user)
@@ -34,7 +35,7 @@ export default function Profile() {
   const onSave = (evt) => {
     evt.preventDefault()
     console.log(`Save update profile`)
-    updateUser({dispatch: dispatch, name: name, email:login, passwd:passwd})
+    dispatch(updateUser({name: name, email:login, passwd:passwd}))
     setEdit({name:true, email:true, passwd:true})
   }
 

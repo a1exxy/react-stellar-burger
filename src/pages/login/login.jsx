@@ -2,7 +2,7 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import React, {useState, useEffect} from "react";
 import styles from './login.module.css'
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../utils/api'
+import { login } from '../../utils/api-wrappers'
 import { useDispatch } from 'react-redux';
 
 export default function Login() {
@@ -21,7 +21,7 @@ export default function Login() {
 
   const onLogin = (evt) => {
     evt.preventDefault()
-    if(login({dispatch:dispatch, email: inputEmail, passwd: inputPasswd})){
+    if(dispatch(login({ email: inputEmail, passwd: inputPasswd}))) {
       navigate('/')
     }
     setInputPasswd('')

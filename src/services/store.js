@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from 'redux-thunk';
 import { rootReducer } from './reducers/index';
-import {socketMiddleware} from './middleware/socketMiddleware'
+import {socketMiddleware} from './middleware/socket-middleware'
 
 import {
   connect as FeedWsConnect,

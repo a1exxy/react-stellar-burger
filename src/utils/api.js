@@ -1,29 +1,9 @@
 // Взаимодействие с API
-import {SET_START_STATE, SET_OK_STATE, SET_FAIL_STATE} from '../services/actions/loader'
-import {SET_ORDER, CLEAR_ORDER} from '../services/actions/order'
-import {LOGGED_IN, LOGGED_OUT, USER_UPDATED, USER_CHECKED} from '../services/actions/user'
-import {
-  connect as connectUser,
-  disconnect as disconnectUser,
-} from "../services/userOrders/actions";
+
+import {setTokensToLocalStorage} from './utils'
 
 const apiURL = process.env.REACT_APP_API
 const baseOptions = {method:'GET', headers: {"Content-Type": "application/json;charset=utf-8"}, redirect: 'follow'}
-const WS_USER_ORDERS_URL = process.env.REACT_APP_WS_USER_ORDERS_URL
-
-const getAccessToken = () => {
-  return localStorage.getItem("accessToken")
-}
-
-const connectUserOrders = (dispatch) => {
-  dispatch(connectUser(`${WS_USER_ORDERS_URL}?token=${getAccessToken().replace('Bearer ', '')}`));
-}
-
-
-const setTokensToLocalStorage = (accessToken, refreshToken) => {
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
-}
 
 const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -32,17 +12,16 @@ const checkReponse = (res) => {
 export const refreshToken = () => {
   // функция обновления токена
   return fetch(`${apiURL}/auth/token`,
-      { ...baseOptions,
+  { ...baseOptions,
         method: "POST",
-        body: JSON.stringify({
-        token: localStorage.getItem("refreshToken"),
-      })
-    })
+        body: JSON.stringify({ token: localStorage.getItem("refreshToken")})
+      }
+    )
     .then(checkReponse)
     .catch(e => console.error(`Не удалось обновить accessToken (${e})`))
-};
+}
 
-const request = async ({method='GET', path, body=null, auth=false, debug=false}) => {
+export const request = async ({method='GET', path, body=null, auth=false, debug=false}) => {
   // Универсальная функция запроса к API
   const url = `${apiURL}${path}`
   const accessToken = localStorage.getItem('accessToken')
@@ -90,166 +69,57 @@ const request = async ({method='GET', path, body=null, auth=false, debug=false})
   }
 }
 
-export function getIngredients () {
-  return function (dispatch) {
-    dispatch({ type: SET_START_STATE })
-      request({path: '/ingredients'})
-      .then( res => {
-        dispatch({
-          type: SET_OK_STATE,
-          feed: res.data
-        })
-      })
-      .catch( err => {
-        dispatch({ type: SET_FAIL_STATE })
-        console.error(`Ошибка сетевого взаимодействия: ${err}`)
-      })
-  }
+export function apiGetIngredients () {
+  return request({path: '/ingredients'})
 }
 
-export function createOrder ({companents}) {
-  return function (dispatch) {
-    dispatch({type: CLEAR_ORDER})
-    request({
+export function apiCreateOrder ({companents}) {
+  return request({
       method: "POST",
       path: '/orders',
       body: {"ingredients": companents},
       auth: true,
       debug: true
     })
-    .then(response => {
-      console.log(response)
-      if(response.success === true) {
-        dispatch({type: SET_ORDER, number: response.order.number, content: companents, name: response.name})
-      } else {
-          Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
-      }
-    })
-    .catch(err => {
-      console.error(`Ошибка сетевого взаимодействия: ${err.message}`);
-      console.log(err)
-    })
-  }
 }
 
-export const getOrder = ({dispatch, orderId}) => {
-  request({path: `/orders/${orderId}`, debug: false})
-    .then(res => {
-      if(res && res.success) {
-        // console.log(res.orders[0])
-        dispatch({type:SET_ORDER,
-          number: res.orders[0].number,
-          content:res.orders[0].ingredients,
-          name: res.orders[0].name,
-          status: res.orders[0].status,
-          createdAt: res.orders[0].createdAt
-        })
-      }
-    })
-    .catch(e => {
-      console.error(`Ошибка получения заказа (${e})`)
-    })
+export const apiGetOrder = ({orderId}) => {
+  return request({path: `/orders/${orderId}`, debug: true})
 }
 
-export const login = ({dispatch, email, passwd}) => {
-  request({
+export const apiLogin = ({email, passwd}) => {
+  return request({
       path:'/auth/login',
       method: 'POST',
       body: {"email": email, "password": passwd}
     })
-    .then(res => {
-      if(res.success) {
-        setTokensToLocalStorage(res.accessToken, res.refreshToken)
-        dispatch({type:LOGGED_IN, user: res.user.name, email:res.user.email})
-        connectUserOrders(dispatch)
-        return true
-      } else {
-        console.error(`Не удалось пройти аутантификацию`)
-        return false
-      }
-    })
-    .catch(e => {
-      console.error(e)
-      return false
-    })
 }
 
-export const logout = (dispatch) => {
-  const refreshToken = localStorage.getItem('refreshToken')
-  request({
+export const apiLogout = () => {
+  return request({
       path:'/auth/logout',
       method: 'POST',
-      body: {"token": refreshToken}
-    })
-    .then(res => {
-      if(res.success) {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        dispatch({type:LOGGED_OUT})
-        dispatch(disconnectUser())
-        return true
-      } else {
-        console.error(`Не удалось разлогинится`)
-        return false
-      }
-    })
-    .catch(e => {
-      console.error(e)
-      return false
+      body: {"token": localStorage.getItem('refreshToken')}
     })
 }
 
-export const register = ({dispatch, name, email, passwd}) => {
-  request({
+export const apiRegister = ({ name, email, passwd}) => {
+  return request({
       path:'/auth/register',
       method: 'POST',
       body: {"name": name, "email": email, "password": passwd}
     })
-    .then(res => {
-      if(res.success) {
-        setTokensToLocalStorage(res.accessToken, res.refreshToken)
-        dispatch({type:LOGGED_IN, user: name, email:email})
-        connectUserOrders(dispatch)
-        return true
-      } else {
-        console.error(`Не удалось пройти регистрацию`)
-        return false
-      }
-    })
-    .catch(e => {
-      console.error(e)
-      return false
-    })
 }
 
-
-
-export function getUser () {
-  return function (dispatch) {
-    const accessToken = getAccessToken()
-    if (accessToken) {
-      request({
-          path: '/auth/user',
-          auth: true
-        })
-        .then(res => {
-          // console.log(res)
-          if(res && res.success) {
-            dispatch({type: LOGGED_IN, user: res.user.name, email: res.user.email})
-            connectUserOrders(dispatch)
-          }
-        })
-        .catch(e => console.error(e))
-        .finally(dispatch({type:USER_CHECKED}))
-    } else {
-      console.info('Нет токена')
-      dispatch({type:USER_CHECKED})
-    }
-  }
+export function apiGetUser () {
+  return request({
+    path: '/auth/user',
+    auth: true
+  })
 }
 
-export const updateUser = ({dispatch, name, email, passwd}) => {
-  request({
+export const apiUpdateUser = ({name, email, passwd}) => {
+  return request({
     path: '/auth/user',
     method: 'PATCH',
     auth: true,
@@ -257,44 +127,20 @@ export const updateUser = ({dispatch, name, email, passwd}) => {
     // Документации для данной ручки нет.
     // Опытным путем определил, что бекенд не меняет имя пользователя, только email и password доступны для изменения
   })
-  .then(res => {
-    if(res.success) {
-      dispatch({type: USER_UPDATED, user: res.user.name, email: res.user.email})
-    } else {
-      console.error(`Не удолось обновить пользователя`)
-    }
-  })
-  .catch(e => console.error(e))
 }
 
-export const passwdReset = ({email, redirect}) => {
-  request({
+export const apiPasswdReset = ({email}) => {
+  return request({
     path: '/password-reset',
     method: 'POST',
     body: {email: email}
   })
-  .then(res => {
-    if (res.success) {
-      redirect()
-    } else {
-      console.error(`Не удолось обновить пользователя`)
-    }
-  })
-  .catch(e => console.error(e))
 }
 
-export const setNewPasswd = ({passwd, code, redirect}) => {
-  request({
+export const apiSetNewPasswd = ({passwd, code}) => {
+  return request({
     path: '/password-reset/reset',
     method: 'POST',
     body: {password:passwd, token:code}
   })
-  .then(res => {
-    if (res.success) {
-      redirect()
-    } else {
-      console.error(`Не удолось установить пароль`)
-    }
-  })
-  .catch(e => console.error(e))
 }

@@ -1,24 +1,36 @@
 import {useEffect} from "react";
 import ReactDOM from 'react-dom'
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from "./modal.module.css"
 import React from "react";
-import ModalOverlay from "../modalOverlay/modalOverlay";
-import { useNavigate } from 'react-router-dom'
+import ModalOverlay from "../modal-overlay/modal-overlay";
+import { useSelector, useDispatch } from 'react-redux';
+import {MODAL_CLOSE} from '../../services/actions/modal'
+import {useLocation, useNavigate} from "react-router-dom";
 
 const modalRoot = document.getElementById("modal"); // элемент в котором окрываются модальные окна
 
-export default function Modal(props) {
+export default function Modal() {
+  // const body = props.children
+  // const {onClose} = props
+  // console.log(onClose)
+  const location = useLocation()
   const navigate = useNavigate()
-  const body = props.children
-  console.log(body)
-  const handleModalClose = () => {
-    // Возвращаемся к предыдущему пути при закрытии модалки
-    navigate(-1);
-  };
+  const dispatch = useDispatch();
+  const modal = useSelector(store => store.modal )
+  // console.log(modal)
+  function onClose () {
+    dispatch({type: MODAL_CLOSE})
+    // console.log(`[Modal] location.state.background`)
+    // console.log(location.state.background)
+    if (location.state.background) {
+      navigate(location.state.background)
+    }
+  }
+
   const handleEscBtn = function (e) {
-    if (e.code === 'Escape') { handleModalClose() }
+    if (e.code === 'Escape') { onClose() }
   }
   useEffect(()=>{
     document.addEventListener('keydown', handleEscBtn)
@@ -27,17 +39,18 @@ export default function Modal(props) {
 
   return ReactDOM.createPortal(
     <div className={styles.modalContainer}>
-      <ModalOverlay onClose={handleModalClose} />
+      <ModalOverlay onClose={onClose} />
       <div className={`${styles.modal}`}>
-        <button className={styles.modalCloseButton} onClick={handleModalClose}><CloseIcon type="primary" /></button>
+        <button className={styles.modalCloseButton} onClick={onClose}><CloseIcon type="primary" /></button>
         <article className={styles.modalBody}>
-          {body}
+          {modal.body}
         </article>
       </div>
     </div>
   , modalRoot)
 }
 
-Modal.propTypes = {
-  children: PropTypes.element.isRequired
-}
+// Modal.propTypes = {
+//   children: PropTypes.element.isRequired,
+//   onClose: PropTypes.func.isRequired
+// }

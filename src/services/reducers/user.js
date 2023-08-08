@@ -13,7 +13,6 @@ export const user = (state = initialState, action) => {
     case LOGGED_OUT:
       return {...initialState, isAuthChecked: true}
     case USER_UPDATED:
-      console.log(action)
       return {...state, user: {...action}.user, email: {...action}.email}
     default:
       return state
