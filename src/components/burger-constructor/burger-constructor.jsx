@@ -7,8 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BURGER_ADD_ELEM } from '../../services/actions/burger'
 import { createOrder } from "../../utils/api-wrappers"
 import BurgerConstructorItem from './burger-constructor-item/buger-constructor-item'
-import {MODAL_OPEN} from "../../services/actions/modal";
-import OrderCreated from "../order-created/order-created";
 import {getAccessToken} from '../../utils/utils'
 import { useNavigate } from 'react-router-dom';
 
@@ -32,8 +30,8 @@ export default function BurgerConstructor() {
     let ids = burgerContent.ingredients.map(e => e._id)
     if(burgerContent.bun) { ids = [...ids, burgerContent.bun._id, burgerContent.bun._id] }
     if(getAccessToken()) {
-      dispatch(createOrder({ companents: ids }))
-      dispatch({type: MODAL_OPEN, body: <OrderCreated />})
+      dispatch(createOrder({ companents: ids}))
+      navigate('/ordercreated', {state: {background: '/'}})
     } else {
       navigate('/login', {state: {background: '/'}})
     }

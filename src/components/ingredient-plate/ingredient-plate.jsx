@@ -1,19 +1,16 @@
 // Плитка ингедиента
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import styles from "./ingredient-plate.module.css";
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { ingredientPropType } from '../../utils/prop-types'
 import { useDrag } from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom'
-import IngredientDetails from '../ingredient-details/ingredient-details'
-import {MODAL_OPEN} from '../../services/actions/modal'
 
 export default function IngredientPlate({settings}) {
   const location = useLocation()
   const burgerContent = useSelector(store => store.burger)
   const ingredientId = settings._id
-  const dispatch = useDispatch();
   const count = useMemo(() =>
     settings.type === 'bun'
       ? burgerContent.bun && burgerContent.bun._id === ingredientId
@@ -32,9 +29,6 @@ export default function IngredientPlate({settings}) {
       plateOpacity: monitor.isDragging() ? 0.5 : 1
     })
   })
-  const onClick = () => {
-    dispatch({type: MODAL_OPEN, body:  <IngredientDetails ingredientId={ingredientId} />})
-  }
 
   return (
     <Link
@@ -42,7 +36,6 @@ export default function IngredientPlate({settings}) {
       key={ingredientId}
       to={`/ingredients/${ingredientId}`}
       state={{ background: location.pathname }}
-      onClick={onClick}
     >
       <div ref={dragTarget} className={styles.ingredientPlate} style={{opacity: `${plateOpacity}`}} >
         <img className={'ml-4'} src={settings.image} alt={settings.name}/>

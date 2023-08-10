@@ -1,9 +1,13 @@
 export const getAccessToken = (onlyToken) => {
   const token = localStorage.getItem("accessToken")
-  if(onlyToken) {
-    return token.replace('Bearer ', '')
+  if(token) {
+    if (onlyToken) {
+      return token.replace('Bearer ', '')
+    } else {
+      return token
+    }
   } else {
-    return token
+    return null
   }
 }
 

@@ -45,6 +45,6 @@ const UserOrdersMiddleware = socketMiddleware({
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk, FeedMiddleware, UserOrdersMiddleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(thunk, FeedMiddleware, UserOrdersMiddleware),
   devTools: process.env.NODE_ENV !== 'production',
 })

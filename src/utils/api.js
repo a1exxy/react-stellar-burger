@@ -6,7 +6,13 @@ const apiURL = process.env.REACT_APP_API
 const baseOptions = {method:'GET', headers: {"Content-Type": "application/json;charset=utf-8"}, redirect: 'follow'}
 
 const checkReponse = (res) => {
-  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+  // console.log(`RUN checkReponse`)
+  // console.log(res)
+  // console.log(`=======================`)
+  // return res.ok ? res.json() : res.json().catch((err) => Promise.reject(err));
+  const r = res.ok ? res.json() : Promise.reject(res);
+  // console.log(r)
+  return r
 };
 
 export const refreshToken = () => {
@@ -35,26 +41,31 @@ export const request = async ({method='GET', path, body=null, auth=false, debug=
     options.authorization = accessToken
   }
   if(debug) {
-    console.log(`-------------------------------`)
-    console.log(`[Debug request] url: ${url}`)
-    console.log(`[Debug request] >`)
-    console.log(`[Debug request] params: `)
-    console.log(`[Debug request] method=${method}`)
-    console.log(`[Debug request] path=${path}`)
-    console.log(`[Debug request] body=${body}`)
-    console.log(`[Debug request] auth=${auth}`)
-    console.log(`[Debug request] debug=${debug}`)
-    console.log(`[Debug request] >`)
-    console.log(`[Debug request] options:`)
-    console.log(options)
-    console.log(`-------------------------------`)
+    console.debug(`-------------------------------`)
+    console.debug(`[Debug request] url: ${url}`)
+    console.debug(`[Debug request] >`)
+    console.debug(`[Debug request] params: `)
+    console.debug(`[Debug request] method=${method}`)
+    console.debug(`[Debug request] path=${path}`)
+    console.debug(`[Debug request] body=${body}`)
+    console.debug(`[Debug request] auth=${auth}`)
+    console.debug(`[Debug request] debug=${debug}`)
+    console.debug(`[Debug request] >`)
+    console.debug(`[Debug request] options:`)
+    console.debug(options)
+    console.debug(`-------------------------------`)
   }
   try {
-    const res = await fetch(url,  options);
+    const res = await fetch(url, options);
+    if(debug){
+      console.debug(`[Debug request] Reponse:`)
+      console.debug(res)
+    }
     return await checkReponse(res);
   } catch (err) {
-    if (err && (err.message === "jwt expired" || !err.success )) {
-      if(debug){console.info('Run refreshToken')}
+    if (err && (err.message === "jwt expired" || !err.success || err.status === 403 || err.status === 401 || err.code === 401 )) {
+      // console.log(err)
+      if(debug){console.debug('[Debug request] Run refreshToken')}
       const refreshData = await refreshToken(); //обновляем токен
       if (refreshData && !refreshData.success) {
         return Promise.reject(refreshData);
@@ -79,12 +90,12 @@ export function apiCreateOrder ({companents}) {
       path: '/orders',
       body: {"ingredients": companents},
       auth: true,
-      debug: true
+      debug: false
     })
 }
 
 export const apiGetOrder = ({orderId}) => {
-  return request({path: `/orders/${orderId}`, debug: true})
+  return request({path: `/orders/${orderId}`, debug: false})
 }
 
 export const apiLogin = ({email, passwd}) => {

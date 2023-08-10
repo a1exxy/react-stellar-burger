@@ -39,9 +39,8 @@ export function createOrder ({companents}) {
     .then(response => {
       if(response.success === true) {
         dispatch({type: SET_ORDER, number: response.order.number, content: companents, name: response.name})
-
       } else {
-          Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
+        return Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
       }
     })
     .catch(err => {
@@ -92,7 +91,7 @@ export const login = ({email, passwd}) => {
   }
 }
 
-export const logout = (dispatch) => {
+export const logout = () => {
   return function (dispatch) {
     apiLogout()
     .then(res => {

@@ -9,7 +9,6 @@ import OrderDescription from '../../order-description/order-description'
 const maxIngredients = process.env.REACT_APP_MAX_VIEW_INGRIDIENTS // Максимальное количество отображаемых картинок на одном заказе
 
 export default function OrderListItem(props) {
-  const dispatch = useDispatch();
   const {name, number, createdAt, ingredients} = props.orders
   const {feed} = useSelector(store => store.loader )
   const location = useLocation()
@@ -29,8 +28,7 @@ export default function OrderListItem(props) {
     }, 0)
   }
 
-  const onClick = (evt) => {
-    dispatch({type: MODAL_OPEN, body: <OrderDescription id={number} />})
+  const onClick = () => {
     navigate( `${location.pathname}/${number}`, {state: {background: location.pathname }} )
   }
 

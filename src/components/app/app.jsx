@@ -18,14 +18,13 @@ import { getIngredients } from "../../utils/api-wrappers"
 import Modal from "../modal/modal";
 import LoadingScreen from '../loading-screen/loading-screen'
 import AppHeader from '../app-header/app-header'
+import OrderCreated from "../order-created/order-created";
 
 export default function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
   const dispatch = useDispatch();
   const state = useSelector(store => store.loader)
-  const modal = useSelector(store => store.modal)
-
   useEffect(()=>{
     dispatch(getUser()) // Проверка пользователя
     dispatch(getIngredients()) // Загрузка данных из API
@@ -37,37 +36,40 @@ export default function App() {
         state.hasError ? <p className={`text text_type_main-large`}>Ошибка загрузки данных...</p>
           : <>
             <AppHeader/>
-            <Routes>
-              <Route index element={<Index />} />
-
-              <Route path="login" element={<ProtectedRouteElement component={<Login/>} onlyUnAuth={true} />} />
-              <Route path="register" element={<ProtectedRouteElement component={<Register/>} onlyUnAuth={true} />} />
-              <Route path="forgot-password" element={<ProtectedRouteElement component={<ForgotPassword/>} onlyUnAuth={true} />} />
-              { background === "forgot-password"
-                && <Route path="reset-password" element={<ProtectedRouteElement component={<ResetPassword/>} onlyUnAuth={true} />}/>
-              }
-
-              <Route path="profile" element={<ProtectedRouteElement component={<Profile />} />} />
-              <Route path="profile/orders" element={<ProtectedRouteElement component={<Orders />} />} />
-              { background
-                ? <Route path="profile/orders/:id" element={<ProtectedRouteElement component={<Orders />} />} />
-                : <Route path="profile/orders/:id" element={<ProtectedRouteElement component={<OrderDescription />} />} />
-              }
-
-              <Route path="feed" element={<Feed />} />
-              { background
-                ? <Route path="/feed/:id" element={<Feed />} />
-                : <Route path="/feed/:id" element={<OrderDescription />} />
-              }
-
-              { background
-                ?  <Route path="/ingredients/:id" element={<Index />}/>
-                : <Route path="/ingredients/:id" element={<IngredientDetails />}/>
-              }
-
-              <Route path="*" element={<NotFound404 />}/>
+            <Routes >
+                <Route path="/" element={<Index />} />
+                <Route path="/ordercreated" element={<Index />} />
+                <Route path="login" element={<ProtectedRouteElement component={<Login/>} onlyUnAuth={true} />} />
+                <Route path="register" element={<ProtectedRouteElement component={<Register/>} onlyUnAuth={true} />} />
+                <Route path="forgot-password" element={<ProtectedRouteElement component={<ForgotPassword/>} onlyUnAuth={true} />} />
+                { background === "forgot-password"
+                  && <Route path="reset-password" element={<ProtectedRouteElement component={<ResetPassword/>} onlyUnAuth={true} />}/>
+                }
+                <Route path="profile" element={<ProtectedRouteElement component={<Profile />} />} />
+                <Route path="profile/orders" element={<ProtectedRouteElement component={<Orders />} />} />
+                { background
+                  ? <Route path="profile/orders/:id" element={<ProtectedRouteElement component={<Orders />} />} />
+                  : <Route path="profile/orders/:id" element={<ProtectedRouteElement component={<OrderDescription />} />} />
+                }
+                <Route path="feed" element={<Feed />} />
+                { background
+                  ? <Route path="/feed/:id" element={<Feed />} />
+                  : <Route path="/feed/:id" element={<OrderDescription />} />
+                }
+                { background
+                  ? <Route path="/ingredients/:id" element={<Index />} />
+                  : <Route path="/ingredients/:id" element={<IngredientDetails />} />
+                }
+                <Route path="*" element={<NotFound404 />}/>
             </Routes>
-            { modal.visible && <Modal /> }
+            { background && (
+              <Routes>
+                  <Route path="/feed/:id" element={<Modal> <OrderDescription /> </Modal> } />
+                  <Route path="/ingredients/:id" element={<Modal> <IngredientDetails /> </Modal> } />
+                  <Route path="/ordercreated" element={<Modal> <OrderCreated /> </Modal> } />
+                  <Route path="profile/orders/:id" element={<ProtectedRouteElement component={<Modal> <OrderDescription /></Modal> } />} />
+              </Routes>
+            )}
           </>
       }
     </>
