@@ -4,7 +4,7 @@ import styles from './register.module.css'
 import { Link } from 'react-router-dom';
 import { register} from '../../utils/api-wrappers'
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function Register() {
   const navigate = useNavigate();

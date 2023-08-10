@@ -2,9 +2,7 @@ import styles from "./order-list-item.module.css"
 import { CurrencyIcon, FormattedDate } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux';
-import {MODAL_OPEN} from "../../../services/actions/modal";
-import OrderDescription from '../../order-description/order-description'
+import { useSelector } from 'react-redux';
 
 const maxIngredients = process.env.REACT_APP_MAX_VIEW_INGRIDIENTS // Максимальное количество отображаемых картинок на одном заказе
 

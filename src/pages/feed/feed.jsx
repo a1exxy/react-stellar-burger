@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import styles from './feed.module.css'
 import OrderList from '../../components/order-list/order-list'
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,7 +9,6 @@ const WS_ALL_ORDERS_URL = process.env.REACT_APP_WS_ALL_ORDERS_URL
 
 export default function Feed () {
   const dispatch = useDispatch();
-  const {id} = useParams()
   const {orders} = useSelector(store => store.feed)
   const doneOrders = orders ? orders.orders.filter(e => e.status === 'done') : []
   const workOrders = orders ? orders.orders.filter(e => e.status !== 'done') : []
