@@ -1,0 +1,51 @@
+.page {
+  width: 1240px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.panels {
+  display: grid;
+  grid-template: auto / 1fr 1fr;
+  grid-column-gap: 60px;
+}
+
+.sumBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  width: 590px;
+}
+
+.orders {
+  display: grid;
+  grid-template: auto auto / 1fr 1fr ;
+  grid-column-gap: 36px;
+  grid-row-gap: 24px;
+}
+
+.orderListBlock {
+  width: 590px;
+}
+
+.orderList {
+  height: 162px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  row-gap: 8px;
+}
+
+.doneOrderNumber {
+  color: #00CCCC;
+}

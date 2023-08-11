@@ -1,6 +1,5 @@
 import {CONSTRUCTOR, FEED, PROFILE} from '../actions/page'
 
-
 const initialState = {page: CONSTRUCTOR}
 
 export const page = (state = initialState, action) => {

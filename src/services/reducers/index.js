@@ -6,6 +6,8 @@ import {order} from './order'
 import {modal} from './modal'
 import {user} from './user'
 import {page} from './page'
+import {feed} from '../feed/reducer'
+import {userOrders} from '../userOrders/reducer'
 
 export const rootReducer = combineReducers({
   burger,
@@ -13,5 +15,7 @@ export const rootReducer = combineReducers({
   order,
   modal,
   user,
-  page
+  page,
+  feed,
+  userOrders,
 })

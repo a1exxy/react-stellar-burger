@@ -2,9 +2,8 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import React, {useState, useEffect} from "react";
 import styles from './login.module.css'
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../utils/api'
-import { useSelector, useDispatch } from 'react-redux';
-
+import { login } from '../../utils/api-wrappers'
+import { useDispatch } from 'react-redux';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -15,12 +14,14 @@ export default function Login() {
   const loginRef = React.useRef(null)
   const passRef = React.useRef(null)
   const onIconClick = () => { viewPass ? setViewPass(false) : setViewPass(true) }
+
   useEffect(()=> {
     viewPass ? passRef.current.type = 'text' : passRef.current.type = 'password'
   }, [viewPass])
+
   const onLogin = (evt) => {
     evt.preventDefault()
-    if(login({dispatch:dispatch, email: inputEmail, passwd: inputPasswd})){
+    if(dispatch(login({ email: inputEmail, passwd: inputPasswd}))) {
       navigate('/')
     }
     setInputPasswd('')
