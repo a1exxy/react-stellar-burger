@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
 }
+
 .orderDetails {
   display: flex;
   flex-direction: column;
@@ -9,6 +10,7 @@
   margin-top: 122px;
   width: 640px;
 }
+
 .itemDescription {
 
 }
@@ -26,6 +28,7 @@
   color: #00CCCC;
   text-align: left;
 }
+
 .element {
   display: flex;
   justify-content: space-between;

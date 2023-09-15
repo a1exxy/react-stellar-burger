@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .ingredientDetailsHeader {
   display: flex;
   align-items: center;
@@ -12,11 +13,13 @@
   width: 640px;
   height: 64px;
 }
+
 .ingredientDetailsParams {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
+
 .ingredientDetailsParamsCell {
   display: flex;
   flex-direction: column;

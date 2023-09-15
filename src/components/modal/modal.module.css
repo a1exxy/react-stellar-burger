@@ -21,7 +21,7 @@
 
 .modalCloseButton {
   position: absolute;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   border: 0;
   top: 60px;
   right: 40px;
