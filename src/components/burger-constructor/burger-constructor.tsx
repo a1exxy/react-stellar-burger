@@ -9,7 +9,11 @@ import {BurgerConstructorItem} from './burger-constructor-item/buger-constructor
 import {getAccessToken} from '../../utils/utils'
 import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "../../services/hooks";
-import {TBurgerIngredientItem} from '../../services/types'
+import {TBurgerIngredientItem, TIngredient} from '../../services/types'
+
+type TCollectedProps = {
+  isHover: boolean
+}
 
 export default function BurgerConstructor(): JSX.Element {
   const burgerContent = useSelector((store) => store.burger)
@@ -20,13 +24,12 @@ export default function BurgerConstructor(): JSX.Element {
       bunPrice, [burgerContent.ingredients, bunPrice]
   )
   const navigate = useNavigate();
-  const [{isHover}, dropTarget] = useDrop({
+  const [{isHover}, dropTarget] = useDrop<TIngredient, unknown, TCollectedProps>({
     accept: "items",
-    drop(item) {
-      // @ts-ignore
+    drop(item: TIngredient) {
       dispatch({type: BURGER_ADD_ELEM, content: item})
     },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isHover: monitor.isOver(),
     })
   });

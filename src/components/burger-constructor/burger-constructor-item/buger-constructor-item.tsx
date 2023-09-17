@@ -16,7 +16,7 @@ export const BurgerConstructorItem = ({element, elementIndex}: IBurgerConstructo
   const burgerContent = useSelector(store => store.burger)
   const dispatch = useDispatch();
   const burgerItemType = 'burgerItemType'
-  const findIndex = (uuid: string) => burgerContent.ingredients.findIndex((i: any) => i.uuid === uuid)
+  const findIndex = (uuid: string) => burgerContent.ingredients.findIndex((i: TBurgerIngredientItem) => i.uuid === uuid)
 
   const [{isDragging}, drag] = useDrag(
     () => ({

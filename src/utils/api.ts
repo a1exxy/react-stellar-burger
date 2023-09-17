@@ -1,5 +1,6 @@
 // Взаимодействие с API
 
+import {TIngredient, TOrder} from '../services/types';
 import {setTokensToLocalStorage} from './utils'
 
 const apiURL = process.env.REACT_APP_API!
@@ -10,24 +11,25 @@ type TOptions = {
   body?: string,
 }
 
-const baseOptions: TOptions = {method: 'GET', headers: {"Content-Type": "application/json;charset=utf-8"}}
 
-const checkReponse = (res: any): Promise<any> => {
-  return res.ok ? res.json() : Promise.reject(res);
-};
+export type TResponse<T> = {
+  success: boolean;
+} & T
+// | string;
 
-export const refreshToken = (): Promise<any> => {
-  // функция обновления токена
-  return fetch(`${apiURL}/auth/token`,
-    {
-      ...baseOptions,
-      method: "POST",
-      body: JSON.stringify({token: localStorage.getItem("refreshToken")})
-    }
-  )
-    .then(checkReponse)
-    .catch(e => console.error(`Не удалось обновить accessToken (${e})`))
+export type TUser = {
+  user: {
+    email: string,
+    name: string
+  }
 }
+
+export type TTokens = {
+  accessToken: string,
+  refreshToken: string,
+}
+
+export type TLogin = TTokens & TUser
 
 type TRequestProps = {
   method?: string,
@@ -37,13 +39,60 @@ type TRequestProps = {
   debug?: boolean
 }
 
-export const request = async ({
-                                method = 'GET',
-                                path,
-                                body = null,
-                                auth = false,
-                                debug = false
-                              }: TRequestProps): Promise<any> => {
+type TGetOrderResponse = TOrder & {
+  owner: string
+}
+
+type TOrderCreated = {
+  name: string,
+  order: {
+    ingredients: Array<TOrder>,
+    _id: string,
+    owner: {
+      name: string,
+      email: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    status: string,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+    number: number,
+    price: number
+  }
+}
+
+const baseOptions: TOptions = {method: 'GET', headers: {"Content-Type": "application/json;charset=utf-8"}}
+
+const checkReponse = <T>(res: Response): Promise<TResponse<T>> => {
+  return res.ok ? res.json().then(data => data as TResponse<T>) : Promise.reject(res.status);
+};
+
+export const refreshToken = (): Promise<TResponse<TLogin>> => {
+  // функция обновления токена
+  return fetch(`${apiURL}/auth/token`,
+    {
+      ...baseOptions,
+      method: "POST",
+      body: JSON.stringify({token: localStorage.getItem("refreshToken")})
+    }
+  )
+    .then(checkReponse<TLogin>)
+    .catch(e => {
+      // console.error(`Не удалось обновить accessToken (${e})`)
+      return Promise.reject(e.message)
+    })
+}
+
+
+export const request = async <T>({
+                                   method = 'GET',
+                                   path,
+                                   body = null,
+                                   auth = false,
+                                   debug = false
+                                 }: TRequestProps): Promise<TResponse<T>> => {
   // Универсальная функция запроса к API
   const url = `${apiURL}${path}`
   const accessToken = localStorage.getItem('accessToken')
@@ -88,7 +137,10 @@ export const request = async ({
         console.debug('[Debug request] Run refreshToken')
       }
       const refreshData = await refreshToken(); //обновляем токен
-      if (refreshData && !refreshData.success) {
+      console.log('refreshData:')
+      console.log(refreshData)
+
+      if (!refreshData.success) {
         return Promise.reject(refreshData);
       }
       setTokensToLocalStorage(refreshData.accessToken, refreshData.refreshToken)
@@ -96,16 +148,16 @@ export const request = async ({
       const res = await fetch(url, options); //повторяем запрос
       return await checkReponse(res);
     } else {
-      return Promise.reject(err);
+      return Promise.reject(err.message);
     }
   }
 }
 
-export function apiGetIngredients(): Promise<any> {
+export function apiGetIngredients(): Promise<TResponse<{ data: TIngredient }>> {
   return request({path: '/ingredients'})
 }
 
-export function apiCreateOrder({companents}: {companents: Array<string>}): Promise<any> {
+export function apiCreateOrder({companents}: { companents: Array<string> }): Promise<TResponse<TOrderCreated>> {
   return request({
     method: "POST",
     path: '/orders',
@@ -115,12 +167,13 @@ export function apiCreateOrder({companents}: {companents: Array<string>}): Promi
   })
 }
 
-export const apiGetOrder = ({orderId}: { orderId: string }): Promise<any> => {
+
+export const apiGetOrder = ({orderId}: { orderId: string }): Promise<TResponse<{ orders: Array<TGetOrderResponse> }>> => {
   return request({path: `/orders/${orderId}`, debug: false})
 }
 
-export const apiLogin = ({email, passwd}: { email: string, passwd: string }): Promise<any> => {
-  return request({
+export const apiLogin = ({email, passwd}: { email: string, passwd: string }): Promise<TResponse<TLogin>> => {
+  return request<TLogin>({
     path: '/auth/login',
     method: 'POST',
     body: {"email": email, "password": passwd}
@@ -135,7 +188,7 @@ export const apiLogout = (): Promise<any> => {
   })
 }
 
-export const apiRegister = ({name, email, passwd}: { name: string, email: string, passwd: string }): Promise<any> => {
+export const apiRegister = ({name, email, passwd}: { name: string, email: string, passwd: string }): Promise<TResponse<TLogin>> => {
   return request({
     path: '/auth/register',
     method: 'POST',
@@ -143,14 +196,14 @@ export const apiRegister = ({name, email, passwd}: { name: string, email: string
   })
 }
 
-export function apiGetUser(): Promise<any> {
+export function apiGetUser(): Promise<TResponse<TUser>> {
   return request({
     path: '/auth/user',
     auth: true
   })
 }
 
-export const apiUpdateUser = ({name, email, passwd}: { name: string, email: string, passwd: string }): Promise<any> => {
+export const apiUpdateUser = ({name, email, passwd}: { name: string, email: string, passwd: string }): Promise<TResponse<TUser>> => {
   return request({
     path: '/auth/user',
     method: 'PATCH',
@@ -161,7 +214,7 @@ export const apiUpdateUser = ({name, email, passwd}: { name: string, email: stri
   })
 }
 
-export const apiPasswdReset = ({email}: { email: string }): Promise<any> => {
+export const apiPasswdReset = ({email}: { email: string }): Promise<TResponse<{ message: string }>> => {
   return request({
     path: '/password-reset',
     method: 'POST',
@@ -169,7 +222,7 @@ export const apiPasswdReset = ({email}: { email: string }): Promise<any> => {
   })
 }
 
-export const apiSetNewPasswd = ({passwd, code}: {passwd:string, code:string}): Promise<any> => {
+export const apiSetNewPasswd = ({passwd, code}: { passwd: string, code: string }): Promise<TResponse<{ message: string }>> => {
   return request({
     path: '/password-reset/reset',
     method: 'POST',

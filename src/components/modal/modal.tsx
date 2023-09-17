@@ -8,7 +8,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 const modalRoot: HTMLElement = document.getElementById("modal")!; // элемент в котором окрываются модальные окна
 
-export default function Modal(props: any): React.ReactPortal {
+export default function Modal(props: { children: React.ReactNode }): React.ReactPortal {
   const {children} = props
   const location = useLocation()
   const navigate = useNavigate()

@@ -11,10 +11,10 @@ export default function ResetPassword() {
   const [passwd, setPasswd] = React.useState('')
   const codeRef = React.useRef<HTMLInputElement>(null)
   const passwdRef = React.useRef<HTMLInputElement>(null)
-  const [viewPass, setViewPass] = useState(false)
+  const [viewPass, setViewPass] = useState<boolean>(false)
 
   const onIconClick = () => {
-    viewPass ? setViewPass(false) : setViewPass(true)
+    setViewPass(!viewPass)
   }
   useEffect(() => {
     viewPass ? passwdRef.current!.type = 'text' : passwdRef.current!.type = 'password'

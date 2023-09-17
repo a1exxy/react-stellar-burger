@@ -8,7 +8,7 @@ import {
   apiGetUser,
   apiLogin,
   apiLogout, apiPasswdReset,
-  apiRegister, apiSetNewPasswd, apiUpdateUser,
+  apiRegister, apiSetNewPasswd, apiUpdateUser
 } from "./api";
 import {getAccessToken, setTokensToLocalStorage} from './utils'
 import {AppThunk} from "../services/hooks";
@@ -40,7 +40,7 @@ export function createOrder({companents}: { companents: Array<string> }):AppThun
         if (response.success === true) {
           dispatch({type: SET_ORDER, number: response.order.number, content: companents, name: response.name})
         } else {
-          return Promise.reject(`Сервер не смог сформировать заказ (${response.message})`)
+          return Promise.reject(`Сервер не смог сформировать заказ (${response})`)
         }
       })
       .catch(err => {
@@ -75,7 +75,7 @@ export const login = ({email, passwd}: { email: string, passwd: string }):AppThu
   return function (dispatch: any) {
     apiLogin({email, passwd})
       .then(res => {
-        if (res.success) {
+        if (res.success && res.accessToken && res.refreshToken) {
           setTokensToLocalStorage(res.accessToken, res.refreshToken)
           dispatch({type: LOGGED_IN, user: res.user.name, email: res.user.email})
         } else {

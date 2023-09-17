@@ -33,15 +33,15 @@ const initialState: TUserStore = {isAuthChecked: false, recoveryEmail: null, use
 export const user = (state = initialState, action: TUserAction) => {
   switch (action.type) {
     case USER_SET_RECOVERY_EMAIL:
-      return {...state, recoveryEmail: {...action}.recoveryEmail}
+      return {...state, recoveryEmail: action.recoveryEmail}
     case USER_CHECKED:
       return {...state, isAuthChecked: true}
     case LOGGED_IN:
-      return {...state, isAuthChecked: true, user: {...action}.user, email: {...action}.email}
+      return {...state, isAuthChecked: true, user: action.user, email: action.email}
     case LOGGED_OUT:
       return {...initialState, isAuthChecked: true}
     case USER_UPDATED:
-      return {...state, user: {...action}.user, email: {...action}.email}
+      return {...state, user: action.user, email: action.email}
     default:
       return state
   }

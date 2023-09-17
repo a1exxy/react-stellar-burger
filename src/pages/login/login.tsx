@@ -11,11 +11,11 @@ export default function Login(): JSX.Element {
   const navigate = useNavigate();
   const [inputEmail, setInputEmail] = useState('')
   const [inputPasswd, setInputPasswd] = useState('')
-  const [viewPass, setViewPass] = useState(false)
+  const [viewPass, setViewPass] = useState<boolean>(false)
   const loginRef = React.useRef<HTMLInputElement>(null)
   const passRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
-    viewPass ? setViewPass(false) : setViewPass(true)
+    setViewPass(!viewPass)
   }
 
   useEffect(() => {

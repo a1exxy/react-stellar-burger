@@ -8,7 +8,6 @@ import ProfileNav from '../../components/profile-nav/profile-nav'
 const viewPasswd: string = '*****'
 
 export default function Profile(): JSX.Element {
-  console.log(`RUN Profile`)
   const {user, email} = useSelector(store => store.user);
   const dispatch = useDispatch();
   const [name, setName] = React.useState(user)
