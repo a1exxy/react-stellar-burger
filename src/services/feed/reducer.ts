@@ -7,11 +7,11 @@ import {
   wsError,
   wsMessage
 } from './actions';
-import type {TAllOrders} from '../types'
+import type {TOrders} from '../types'
 
 type IFeedState = {
   status: string,
-  orders: TAllOrders | null,
+  orders: TOrders | null,
   connectingError: string
 }
 

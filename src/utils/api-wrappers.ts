@@ -14,7 +14,7 @@ import {getAccessToken, setTokensToLocalStorage} from './utils'
 import {AppThunk} from "../services/hooks";
 
 
-export function getIngredients() {
+export function getIngredients():AppThunk {
   return function (dispatch: any) {
     dispatch({type: SET_START_STATE})
     apiGetIngredients()
@@ -32,7 +32,7 @@ export function getIngredients() {
 }
 
 
-export function createOrder({companents}: any) {
+export function createOrder({companents}: { companents: Array<string> }):AppThunk {
   return function (dispatch: any) {
     dispatch({type: CLEAR_ORDER})
     apiCreateOrder({companents})
@@ -50,7 +50,7 @@ export function createOrder({companents}: any) {
   }
 }
 
-export const getOrder = ({orderId}: { orderId: string | undefined }) => {
+export const getOrder = ({orderId}: { orderId: string }):AppThunk => {
   return function (dispatch: any) {
     apiGetOrder({orderId})
       .then(res => {
@@ -71,7 +71,7 @@ export const getOrder = ({orderId}: { orderId: string | undefined }) => {
   }
 }
 
-export const login = ({email, passwd}: { email: string, passwd: string }) => {
+export const login = ({email, passwd}: { email: string, passwd: string }):AppThunk => {
   return function (dispatch: any) {
     apiLogin({email, passwd})
       .then(res => {
@@ -88,7 +88,7 @@ export const login = ({email, passwd}: { email: string, passwd: string }) => {
   }
 }
 
-export const logout = () => {
+export const logout = ():AppThunk => {
   return function (dispatch: any) {
     apiLogout()
       .then(res => {
@@ -109,7 +109,12 @@ export const logout = () => {
   }
 }
 
-export const register = ({name, email, passwd, redirect}: any) => {
+export const register = ({name, email, passwd, redirect}: {
+  name: string,
+  email: string,
+  passwd: string,
+  redirect: () => void
+}):AppThunk => {
   return function (dispatch: any) {
     apiRegister({name, email, passwd})
       .then(res => {
@@ -145,7 +150,7 @@ export function getUser(): AppThunk {
   }
 }
 
-export const updateUser = ({name, email, passwd}: any) => {
+export const updateUser = ({name, email, passwd}: { name: string, email: string, passwd: string }): AppThunk => {
   return function (dispatch: any) {
     apiUpdateUser({name, email, passwd})
       .then(res => {
@@ -159,7 +164,7 @@ export const updateUser = ({name, email, passwd}: any) => {
   }
 }
 
-export const passwdReset = ({email, redirect}: any) => {
+export const passwdReset = ({email, redirect}: { email: string, redirect: () => void }) => {
   apiPasswdReset({email})
     .then(res => {
       if (res.success) {
@@ -171,7 +176,7 @@ export const passwdReset = ({email, redirect}: any) => {
     .catch(e => console.error(e))
 }
 
-export const setNewPasswd = ({passwd, code, redirect}: any) => {
+export const setNewPasswd = ({passwd, code, redirect}: { passwd: string, code: string, redirect: () => void }) => {
   apiSetNewPasswd({passwd, code})
     .then(res => {
       if (res.success) {

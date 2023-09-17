@@ -12,17 +12,16 @@ export default function Register(): JSX.Element {
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [passwd, setPasswd] = React.useState('')
-  const nameRef = React.useRef(null)
-  const emailRef = React.useRef(null)
-  const passwdRef = React.useRef(null)
+  const nameRef = React.useRef<HTMLInputElement>(null)
+  const emailRef = React.useRef<HTMLInputElement>(null)
+  const passwdRef = React.useRef<HTMLInputElement>(null)
   const [viewPass, setViewPass] = useState(false)
   const onIconClick = () => {
     viewPass ? setViewPass(false) : setViewPass(true)
   }
 
   useEffect(() => {
-    // @ts-ignore
-    viewPass ? passwdRef.current.type = 'text' : passwdRef.current.type = 'password'
+    viewPass ? passwdRef.current!.type = 'text' : passwdRef.current!.type = 'password'
   }, [viewPass])
 
   const redirect = () => {
@@ -78,11 +77,9 @@ export default function Register(): JSX.Element {
           size='default'
           extraClass="ml-1"
         />
-        {/*<Link to='/profile' className={styles.link}>*/}
         <Button htmlType="submit" type="primary" size="medium">
           Зарегистрироваться
         </Button>
-        {/*</Link>*/}
         <p className={`${styles.loginText} text text_type_main-default mt-14`}>
           Уже зарегистрированы? <Link to='/login' className={styles.link}>Войти</Link>
         </p>

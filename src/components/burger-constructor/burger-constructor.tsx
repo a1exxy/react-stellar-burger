@@ -9,14 +9,14 @@ import {BurgerConstructorItem} from './burger-constructor-item/buger-constructor
 import {getAccessToken} from '../../utils/utils'
 import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "../../services/hooks";
-import {IBurgerContentIngredient} from '../../services/types'
+import {TBurgerIngredientItem} from '../../services/types'
 
 export default function BurgerConstructor(): JSX.Element {
   const burgerContent = useSelector((store) => store.burger)
   const dispatch = useDispatch();
   const bunPrice = useMemo(() => burgerContent.bun ? burgerContent.bun.price : 0, [burgerContent.bun])
   const burgerPrice = useMemo(
-    () => burgerContent.ingredients.reduce((sum: number, item: IBurgerContentIngredient) => sum + item.price, 0) +
+    () => burgerContent.ingredients.reduce((sum: number, item: TBurgerIngredientItem) => sum + item.price, 0) +
       bunPrice, [burgerContent.ingredients, bunPrice]
   )
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function BurgerConstructor(): JSX.Element {
   });
 
   const onOrder = () => {
-    let ids = burgerContent.ingredients.map((e: IBurgerContentIngredient) => e._id)
+    let ids = burgerContent.ingredients.map((e: TBurgerIngredientItem) => e._id)
     if (burgerContent.bun) {
       ids = [...ids, burgerContent.bun._id, burgerContent.bun._id]
     }
@@ -60,7 +60,7 @@ export default function BurgerConstructor(): JSX.Element {
           }
         </div>
         <ul className={`custom-scroll ${styles.constructorList}`}>
-          {burgerContent.ingredients.map((item: IBurgerContentIngredient, index: number) =>
+          {burgerContent.ingredients.map((item: TBurgerIngredientItem, index: number) =>
             <BurgerConstructorItem key={item.uuid} element={item} elementIndex={index}/>
           )}
         </ul>

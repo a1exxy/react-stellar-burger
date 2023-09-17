@@ -15,9 +15,9 @@ export default function Profile(): JSX.Element {
   const [login, setEmail] = React.useState(email)
   const [passwd, setPasswd] = React.useState(viewPasswd)
   const [edit, setEdit] = React.useState({name: true, email: true, passwd: true})
-  const nameRef = React.useRef(null)
-  const emailRef = React.useRef(null)
-  const passwdRef = React.useRef(null)
+  const nameRef = React.useRef<HTMLInputElement>(null)
+  const emailRef = React.useRef<HTMLInputElement>(null)
+  const passwdRef = React.useRef<HTMLInputElement>(null)
 
   const onEditIconClick = (ref: React.MutableRefObject<any>) => {
     console.log(ref)
@@ -35,8 +35,10 @@ export default function Profile(): JSX.Element {
   const onSave = (evt: React.FormEvent) => {
     evt.preventDefault()
     console.log(`Save update profile`)
-    dispatch(updateUser({name: name, email: login, passwd: passwd}))
-    setEdit({name: true, email: true, passwd: true})
+    if (name && login) {
+      dispatch(updateUser({name: name, email: login, passwd: passwd}))
+      setEdit({name: true, email: true, passwd: true})
+    }
   }
 
   return (

@@ -3,8 +3,7 @@ import {CurrencyIcon, FormattedDate} from "@ya.praktikum/react-developer-burger-
 import React from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "../../../services/hooks";
-import type {IBurgerContentIngredient, IIngredient, TOrder} from '../../../services/types'
-import {string} from "prop-types";
+import type {TIngredient, TOrder} from '../../../services/types'
 
 const maxIngredients = Number(process.env.REACT_APP_MAX_VIEW_INGRIDIENTS!)// Максимальное количество отображаемых картинок на одном заказе
 
@@ -16,7 +15,7 @@ export default function OrderListItem(props: { orders: TOrder }): JSX.Element {
   const getSumPrice = (): number => {
     return ingredients.reduce((sum, current) => {
       if (feed.length > 0) {
-        const {price} = feed.find((e: IIngredient) => e._id === current)!
+        const {price} = feed.find((e: TIngredient) => e._id === current)!
         if (price) {
           return sum + price
         } else {
@@ -44,8 +43,8 @@ export default function OrderListItem(props: { orders: TOrder }): JSX.Element {
       <div className={styles.endLine}>
         <ul className={styles.imgList}>
           {ingredients.slice(0, 6).reverse().map((item, index) => {
-              // @ts-ignore
-            const {image_mobile, name} = feed ? feed.find((e: IIngredient) => e._id === item) : {
+            // @ts-ignore
+            const {image_mobile, name} = feed ? feed.find((e: TIngredient) => e._id === item) : {
                 image_mobile: '',
                 name: ''
               }

@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {WebsocketStatus, WebsocketStatusType} from '../../utils/ws';
+import {WebsocketStatus} from '../../utils/ws';
 import {
   wsConnecting,
   wsOpen,
@@ -7,17 +7,18 @@ import {
   wsError,
   wsMessage
 } from './actions';
+import {TOrders} from "../types";
 
 
 type TUserOrdersInetType = {
   status: string,
-  orders: any, // TODO заменить any
+  orders: TOrders | null
   connectingError: string
 }
 
-const initialState:TUserOrdersInetType = {
+const initialState: TUserOrdersInetType = {
   status: WebsocketStatus.OFFLINE,
-  orders: {},
+  orders: null,
   connectingError: ''
 }
 

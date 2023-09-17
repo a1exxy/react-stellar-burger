@@ -3,14 +3,14 @@ import {useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "../../services/hooks";
 import {TPages} from "../../services/types";
 
-interface IHeaderButtonProps {
+type THeaderButtonProps = {
   img: any,
   to: string,
   name: TPages,
   text: string
 }
 
-export const HeaderButton = (props: IHeaderButtonProps): JSX.Element => {
+export const HeaderButton = (props: THeaderButtonProps): JSX.Element => {
   const {img: ImgComponent, to, name, text} = props
   const navigate = useNavigate();
   const {page} = useSelector(store => store.page)

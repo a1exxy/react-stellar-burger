@@ -12,15 +12,14 @@ export default function Login(): JSX.Element {
   const [inputEmail, setInputEmail] = useState('')
   const [inputPasswd, setInputPasswd] = useState('')
   const [viewPass, setViewPass] = useState(false)
-  const loginRef = React.useRef(null)
-  const passRef = React.useRef(null)
+  const loginRef = React.useRef<HTMLInputElement>(null)
+  const passRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
     viewPass ? setViewPass(false) : setViewPass(true)
   }
 
   useEffect(() => {
-    // @ts-ignore
-    viewPass ? passRef.current.type = 'text' : passRef.current.type = 'password'
+    viewPass ? passRef.current!.type = 'text' : passRef.current!.type = 'password'
   }, [viewPass])
 
   const onLogin = (evt: React.FormEvent) => {

@@ -4,7 +4,7 @@ import styles from "./ingredient-details.module.css";
 import {useParams} from 'react-router-dom'
 import {useSelector} from "../../services/hooks";
 import {useMemo} from "react";
-import {IBurgerContentIngredient, IIngredient} from "../../services/types";
+import {TIngredient} from "../../services/types";
 
 type TIngredientDetailsProps = {
   ingredientId?: number
@@ -15,7 +15,7 @@ export default function IngredientDetails(props: TIngredientDetailsProps): JSX.E
   const {id} = useParams()
   const ingredientId = id ? id : props.ingredientId
   const item = useMemo(() => {
-    const itemList = ingredients.filter((e: IIngredient) => e._id === ingredientId)
+    const itemList = ingredients.filter((e: TIngredient) => e._id === ingredientId)
     if (itemList.length === 1) {
       return itemList[0]
     } else {

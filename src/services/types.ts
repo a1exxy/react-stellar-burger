@@ -1,10 +1,8 @@
-import {rootReducer} from "./reducers";
 
-export type RootState = ReturnType<typeof rootReducer>
 
 export type TIngredientType = 'bun' | 'sauce' | 'main'
 
-export interface IIngredient {
+export type TIngredient = {
   _id: string,
   name: string,
   type: TIngredientType,
@@ -19,21 +17,7 @@ export interface IIngredient {
   __v: number
 }
 
-
-export interface IBurgerContentIngredient extends IIngredient {
-  uuid: string
-}
-
-export interface IBurgerConstructorItemElement extends IIngredient {
-  uuid: string
-}
-
-export type TOrderListItem = {
-  name: string,
-  number: number,
-  createdAt: string,
-  ingredients: Array<string>
-}
+export type TBurgerIngredientItem =  TIngredient & { uuid: string }
 
 export type TOrder = {
   createdAt: string,
@@ -45,9 +29,7 @@ export type TOrder = {
   _id: string
 }
 
-export type TOrders = Array<TOrder>
-
-export type TAllOrders = {
+export type TOrders = {
   orders: Array<TOrder>,
   success: boolean,
   total: number,

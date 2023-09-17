@@ -1,8 +1,8 @@
 import {SET_START_STATE, SET_OK_STATE, SET_FAIL_STATE} from '../actions/loader'
-import {IIngredient} from "../types";
+import {TIngredient} from "../types";
 
 type TLoaderState = {
-  feed: Array<IIngredient>,
+  feed: Array<TIngredient>,
   isLoading: boolean,
   hasError: boolean
 }
@@ -11,7 +11,7 @@ const initialState: TLoaderState = {feed: [], isLoading: false, hasError: false}
 
 type TLoaderAction =
   | {type: typeof SET_START_STATE}
-  | {type: typeof SET_OK_STATE, feed: Array<IIngredient>}
+  | {type: typeof SET_OK_STATE, feed: Array<TIngredient>}
   | {type: typeof SET_FAIL_STATE}
 
 export const loader = (state = initialState, action: TLoaderAction) => {

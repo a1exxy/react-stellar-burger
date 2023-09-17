@@ -9,16 +9,15 @@ export default function ResetPassword() {
   const navigate = useNavigate()
   const [code, setCode] = React.useState('')
   const [passwd, setPasswd] = React.useState('')
-  const codeRef = React.useRef(null)
-  const passwdRef = React.useRef(null)
+  const codeRef = React.useRef<HTMLInputElement>(null)
+  const passwdRef = React.useRef<HTMLInputElement>(null)
   const [viewPass, setViewPass] = useState(false)
 
   const onIconClick = () => {
     viewPass ? setViewPass(false) : setViewPass(true)
   }
   useEffect(() => {
-    // @ts-ignore
-    viewPass ? passwdRef.current.type = 'text' : passwdRef.current.type = 'password'
+    viewPass ? passwdRef.current!.type = 'text' : passwdRef.current!.type = 'password'
   }, [viewPass])
 
   const redirect = () => {

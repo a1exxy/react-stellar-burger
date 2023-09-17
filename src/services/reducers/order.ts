@@ -2,7 +2,7 @@ import {SET_ORDER, CLEAR_ORDER} from '../actions/order'
 
 type TOrderStore = {
   number: null | number,
-  content: null | Array<any>, // TODO убрать ANY
+  content: null | Array<string>,
   name: null | string,
   status: null | string,
   createdAt: null | string
@@ -11,7 +11,7 @@ type TOrderStore = {
 type TSetOrderAction = {
   type : typeof SET_ORDER
   number: number,
-  content: Array<any>, // TODO убрать ANY
+  content: Array<string>,
   name: string,
   status: string,
   createdAt: string

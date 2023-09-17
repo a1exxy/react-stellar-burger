@@ -6,10 +6,10 @@ import {CurrencyIcon, FormattedDate} from "@ya.praktikum/react-developer-burger-
 import {getOrder} from '../../utils/api-wrappers'
 import Thumbnail from '../thumbnail/thumbnail'
 import {useSelector, useDispatch} from "../../services/hooks";
-import type {IIngredient} from '../../services/types'
+import type {TIngredient} from '../../services/types'
 
 type TIngredientCount = {
-  element: IIngredient,
+  element: TIngredient,
   count: number
 }
 
@@ -17,7 +17,7 @@ export default function OrderDescription(props: { id?: string }): JSX.Element {
   const storeIngredients = useSelector(store => store.loader.feed)
   const dispatch = useDispatch();
   const {id} = useParams()
-  const orderId = id ? id : props.id
+  const orderId: string = id ? id : props.id!
   const order = useSelector(store => store.order)
   useEffect(() => {
     dispatch(getOrder({orderId: orderId}))
@@ -37,7 +37,7 @@ export default function OrderDescription(props: { id?: string }): JSX.Element {
       let res: Array<TIngredientCount> = []
       let sumPrice: number = 0
       for (let key in ingredientsHash) {
-        const item = storeIngredients.find((e: IIngredient) => e._id === key)!
+        const item = storeIngredients.find((e: TIngredient) => e._id === key)!
         res = [...res, {element: item, count: ingredientsHash[key]}]
         sumPrice += item.price * ingredientsHash[key]
       }

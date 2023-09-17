@@ -1,10 +1,10 @@
 import styles from "./modal-overlay.module.css"
 
-interface IModalOverlayPropsType {
+type TModalOverlayPropsType = {
   onClose(): void
 }
 
-export default function ModalOverlay(props: IModalOverlayPropsType): JSX.Element {
+export default function ModalOverlay(props: TModalOverlayPropsType): JSX.Element {
   return (
     <div className={styles.modalOverlay} onClick={props.onClose}></div>
   )

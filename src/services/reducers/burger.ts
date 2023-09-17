@@ -1,10 +1,10 @@
 import {BURGER_ADD_ELEM, BURGER_REMOVE_ELEM, BURGER_MOVE_ELEM} from '../actions/burger'
 import {v4 as uuidv4} from 'uuid';
-import {IIngredient, IBurgerConstructorItemElement} from "../types";
+import {TIngredient, TBurgerIngredientItem} from "../types";
 
 type TBurgerState = {
-  bun: IIngredient | null;
-  ingredients: Array<IBurgerConstructorItemElement>
+  bun: TIngredient | null;
+  ingredients: Array<TBurgerIngredientItem>
 }
 
 const initialState: TBurgerState = {
@@ -14,7 +14,7 @@ const initialState: TBurgerState = {
 
 type TAddElemAction = {
   type: typeof BURGER_ADD_ELEM,
-  content: IIngredient | IBurgerConstructorItemElement
+  content: TIngredient | TBurgerIngredientItem
 };
 
 type TRemoveElemAction = {
@@ -44,7 +44,7 @@ export const burger = (state = initialState, action: TBurgerActions) => {
       }
 
     case BURGER_REMOVE_ELEM:
-      return {...state, ingredients: state.ingredients.filter((item: IBurgerConstructorItemElement) => item.uuid !== action.uuid)}
+      return {...state, ingredients: state.ingredients.filter((item: TBurgerIngredientItem) => item.uuid !== action.uuid)}
 
     case BURGER_MOVE_ELEM:
       const {from, to} = action

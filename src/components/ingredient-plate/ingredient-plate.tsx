@@ -6,10 +6,10 @@ import {useDrag} from 'react-dnd';
 import {useLocation, Link} from 'react-router-dom'
 import {useSelector} from "../../services/hooks"
 
-import {IIngredient, IBurgerContentIngredient} from '../../services/types'
+import {TIngredient, TBurgerIngredientItem} from '../../services/types'
 
 type TIngredientPlateProps = {
-  settings: IIngredient
+  settings: TIngredient
 }
 
 export default function IngredientPlate({settings}: TIngredientPlateProps): JSX.Element {
@@ -22,7 +22,7 @@ export default function IngredientPlate({settings}: TIngredientPlateProps): JSX.
           ? 1
           : null
         : burgerContent.ingredients.length > 0
-          ? burgerContent.ingredients.reduce((sum: number, current: IBurgerContentIngredient) => current._id === settings._id ? sum + 1 : sum, 0)
+          ? burgerContent.ingredients.reduce((sum: number, current: TBurgerIngredientItem) => current._id === settings._id ? sum + 1 : sum, 0)
           : null
     ,
     [burgerContent.ingredients, ingredientId, burgerContent.bun]
