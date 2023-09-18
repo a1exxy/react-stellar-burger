@@ -3,8 +3,8 @@ export const socketMiddleware = (wsActions) => {
     let socket = null;
 
     return (next) => (action) => {
-      const { dispatch } = store;
-      const { type } = action;
+      const {dispatch} = store;
+      const {type} = action;
       const {
         wsConnect,
         wsSendMessage,
@@ -31,7 +31,7 @@ export const socketMiddleware = (wsActions) => {
         };
 
         socket.onmessage = (event) => {
-          const { data } = event;
+          const {data} = event;
           const parsedData = JSON.parse(data);
 
           dispatch(onMessage(parsedData));
